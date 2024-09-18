@@ -4,7 +4,13 @@ import java.sql.Connection;
 
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
-
+/**
+ * <p>Dao</p>
+ * <p>全てのSQLはこちらのDAOを継承して作成する</p>
+ *
+ * @author 東京情報校　竹井　一馬
+ * @version 1.0
+ */
 public class Dao {
 	/**
 	 * データソース:DataSource:クラスフィールド

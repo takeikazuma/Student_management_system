@@ -23,8 +23,6 @@ public class FrontController extends HttpServlet {
 
 			// 遷移先URLを取得
 			action.execute(req, res);
-			//String url = action.execute(req, res);
-			//req.getRequestDispatcher(url).forward(req, res);
 
 		} catch (Exception e) {
 			e.printStackTrace();

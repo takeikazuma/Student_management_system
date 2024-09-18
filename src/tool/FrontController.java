@@ -25,7 +25,7 @@ public class FrontController extends HttpServlet {
 			action.execute(req, res);
            //test
 
-			//あいうえお
+			//あいうえおあああ
 
 		} catch (Exception e) {
 			e.printStackTrace();

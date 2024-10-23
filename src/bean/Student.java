@@ -4,56 +4,85 @@ import java.io.Serializable;
 
 public class Student implements Serializable{
 
-	private String no;
-	private String name;
-	private int entYear;
-	private String classNum;
-	private boolean isAttend;
-	private School school;
+	private int studentId;
+	private int gradeClassId;
+	private int admissionYear;
+	private String studentName;
+	private String studentKana;
+	private int schoolYear;
+	private datetime withdrawalDate;
+	private boolean isEnrollment;
+	private datetime regDate;
+	private datetime updateDate;
 
-	public String getNo() {
-		return no;
+	public int getStudentId() {
+		return studentId;
 	}
-	public void setNo(String no) {
-		this.no = no;
-	}
-
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
+	public void setStudentId(int studentId) {
+		this.studentId = studentId;
 	}
 
-	public int getEntYear() {
-		return entYear;
+	public int getGradeClassId() {
+		return gradeClassId;
 	}
-	public void setEntYear(int entYear) {
-		this.entYear = entYear;
-	}
-
-	public String getClassNum() {
-		return classNum;
-	}
-	public void setClassNum(String classNum) {
-		this.classNum = classNum;
+	public void setGradeClassId(int gradeClassId) {
+		this.gradeClassId = gradeClassId;
 	}
 
-	public boolean isAttend() {
-		return isAttend;
+	public int getAdmissionYear() {
+		return admissionYear;
 	}
-	public void setAttend(boolean isAttend) {
-		this.isAttend = isAttend;
+	public void setAdmissionYear(int admissionYear) {
+		this.admissionYear = admissionYear;
 	}
 
-	public School getSchool() {
-		return school;
+	public String getStudentName() {
+		return studentName;
 	}
-	public void setSchool(School school) {
-		this.school = school;
+	public void setStudentName(String studentName) {
+		this.studentName = studentName;
+	}
+
+	public String getStudentKana() {
+		return studentKana;
+	}
+	public void setStudentKana(String studentkana) {
+		this.studentKana = studentKana;
 	}
 
 	public int getSchoolYear() {
-		return 0;
+		return schoolYear;
 	}
+	public void setSchoolYear(int schoolYear) {
+		this.schoolYear = schoolYear;
+	}
+
+	public datetime getWithdrawalDate() {
+		return withdrawalDate;
+	}
+	public void setWithdrawalDate(datetime withdrawalDate) {
+		this.withdrawalDate = withdrawalDate;
+	}
+
+	public boolean getIsEnrollment() {
+		return isEnrollment;
+	}
+	public void setIsEnrollment(boolean isEnrollment) {
+		this.isEnrollment = isEnrollment;
+	}
+
+	public datetime getRegDate() {
+		return regDate;
+	}
+	public void setRegDate(datetime regDate) {
+		this.regDate = regDate;
+	}
+
+	public datetime getUpdateDate() {
+		return updateDate;
+	}
+	public void setUpdateDate(datetime updateDate) {
+		this.updateDate = updateDate;
+	}
+
 }

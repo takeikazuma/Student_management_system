@@ -1,28 +1,27 @@
-package chapter24;
+package action;
 
-import bean.Customer;
-import dao.CustomerDAO;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import tool.Action;
-import javax.servlet.http.*;
 
 public class LoginAction extends Action {
-	public String execute(
-		HttpServletRequest request, HttpServletResponse response
-	) throws Exception {
 
-		HttpSession session=request.getSession();
-
-		String login=request.getParameter("login");
-		String password=request.getParameter("password");
-
-		CustomerDAO dao=new CustomerDAO();
-		Customer customer=dao.search(login, password);
-		
-		if (customer!=null) {
-			session.setAttribute("customer", customer);
-			return "login-out.jsp";
-		}
-		
-		return "login-error.jsp";
+	@Override
+	public void execute(HttpServletRequest req, HttpServletResponse res) throws Exception {
+		//ローカル変数の宣言 1
+		//なし
+		//リクエストパラメータ―の取得 2
+		//なし
+		//DBからデータ取得 3
+		//なし
+		//ビジネスロジック 4
+		//なし
+		//DBへデータ保存 5
+		//なし
+		//レスポンス値をセット 6
+		//なし
+		//JSPへフォワード 7
+		req.getRequestDispatcher("menu.jsp").forward(req, res);
 	}
 }

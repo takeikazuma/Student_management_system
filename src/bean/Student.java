@@ -46,7 +46,7 @@ public class Student implements Serializable{
 	public String getStudentKana() {
 		return studentKana;
 	}
-	public void setStudentKana(String studentkana) {
+	public void setStudentKana(String studentKana) {
 		this.studentKana = studentKana;
 	}
 

@@ -4,32 +4,32 @@ import java.io.Serializable;
 
 public class Subject implements Serializable{
 
-	private String subjectId;
-	private String subjectCode;
-	private String subjectName;
+	private int subjectId;
+	private char subjectCode;
+	private char subjectName;
 	private int courseYear;
 	private datetime regDate;
 	private datetime updateDate;
 
 
-	public String getSubjectId() {
+	public int getSubjectId() {
 		return subjectId;
 	}
-	public void setSubjectId(String subjectId) {
+	public void setSubjectId(int subjectId) {
 		this.subjectId = subjectId;
 	}
 
-	public String getSubjectCode() {
+	public char getSubjectCode() {
 		return subjectCode;
 	}
-	public void setSubjectCode(String subjectCode) {
+	public void setSubjectCode(char subjectCode) {
 		this.subjectCode = subjectCode;
 	}
 
-	public String getSubjectName() {
+	public char getSubjectName() {
 		return subjectName;
 	}
-	public void setSubjectName(String subjectName) {
+	public void setSubjectName(char subjectName) {
 		this.subjectName = subjectName;
 	}
 

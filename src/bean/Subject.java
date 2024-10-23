@@ -32,18 +32,21 @@ public class Subject implements Serializable{
 	public void setSubjectName(String subjectName) {
 		this.subjectName = subjectName;
 	}
+
 	public int getCourseYear(){
 		return  courseYear;
 	}
-	public void setRegDate(int courseYear) {
+	public void setCourseYear(int courseYear) {
 		this.courseYear = courseYear;
 	}
+
 	public datetime getRegDate(){
 		return  regDate;
 	}
 	public void setRegDate(datetime regDate) {
 		this.regDate = regDate;
 	}
+
 	public datetime getUpdateDate(){
 		return  updateDate;
 	}

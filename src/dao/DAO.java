@@ -11,7 +11,7 @@ import javax.sql.DataSource;
  * @author 東京情報校　竹井　一馬
  * @version 1.0
  */
-public class Dao {
+public class DAO {
 	/**
 	 * データソース:DataSource:クラスフィールド
 	 */

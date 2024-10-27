@@ -29,7 +29,7 @@ public class DAO {
 			// InitialContextを初期化
 			InitialContext ic = new InitialContext();
 			// データベースへ接続
-			ds = (DataSource) ic.lookup("java:/comp/env/jdbc/yajima");
+			ds = (DataSource) ic.lookup("java:/comp/env/jdbc/exam");
 		}
 		// データベースへのコネクションを返却
 		return ds.getConnection();

@@ -3,20 +3,28 @@ package bean;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 
-public class Subject implements Serializable{
+public class Score implements Serializable{
 
-	private int subjectId;
+	private int scoreId;
+	private int studentId;
 	private String subjectCode;
-	private String subjectName;
-	private int courseYear;
+	private int scoreMonth;
+	private int scoreValue;
 	private ZonedDateTime regDate;//	private datetime regDate;
 	private ZonedDateTime updateDate;//	private datetime updateDate;
 
-	public int getSubjectId() {
-		return subjectId;
+	public int getScoreId() {
+		return scoreId;
 	}
-	public void setSubjectId(int subjectId) {
-		this.subjectId = subjectId;
+	public void setScoreId(int scoreId) {
+		this.scoreId = scoreId;
+	}
+
+	public int getStudentId() {
+		return studentId;
+	}
+	public void setStudentId(int studentId) {
+		this.studentId = studentId;
 	}
 
 	public String getSubjectCode() {
@@ -26,18 +34,18 @@ public class Subject implements Serializable{
 		this.subjectCode = subjectCode;
 	}
 
-	public String getSubjectName() {
-		return subjectName;
+	public int getScoreMonth(){
+		return  scoreMonth;
 	}
-	public void setSubjectName(String subjectName) {
-		this.subjectName = subjectName;
+	public void setScoreMonth(int scoreMonth) {
+		this.scoreMonth = scoreMonth;
 	}
 
-	public int getCourseYear(){
-		return  courseYear;
+	public int getScoreValue(){
+		return  scoreValue;
 	}
-	public void setCourseYear(int courseYear) {
-		this.courseYear = courseYear;
+	public void setScoreValue(int scoreValue) {
+		this.scoreValue = scoreValue;
 	}
 
 	public ZonedDateTime getRegDate(){

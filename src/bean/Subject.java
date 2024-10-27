@@ -1,6 +1,7 @@
 package bean;
 
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 
 public class Subject implements Serializable{
 
@@ -8,9 +9,8 @@ public class Subject implements Serializable{
 	private char subjectCode;
 	private char subjectName;
 	private int courseYear;
-	private datetime regDate;
-	private datetime updateDate;
-
+	private ZonedDateTime regDate;//	private datetime regDate;
+	private ZonedDateTime updateDate;//	private datetime updateDate;
 
 	public int getSubjectId() {
 		return subjectId;
@@ -40,17 +40,17 @@ public class Subject implements Serializable{
 		this.courseYear = courseYear;
 	}
 
-	public datetime getRegDate(){
+	public ZonedDateTime getRegDate(){
 		return  regDate;
 	}
-	public void setRegDate(datetime regDate) {
+	public void setRegDate(ZonedDateTime regDate) {
 		this.regDate = regDate;
 	}
 
-	public datetime getUpdateDate(){
+	public ZonedDateTime getUpdateDate(){
 		return  updateDate;
 	}
-	public void setUpdateDate(datetime updateDate) {
+	public void setUpdateDate(ZonedDateTime updateDate) {
 		this.updateDate = updateDate;
 	}
 }

@@ -1,6 +1,10 @@
 package bean;
 
 import java.io.Serializable;
+//datetimeの変わりにZonedDateTimeを使用するためのライブラリ(落合)
+//タイムゾーン情報を含む日付と時間を表すクラス
+//（例: 2023-10-12T15:30+09:00[Asia/Tokyo]）
+import java.time.ZonedDateTime;
 
 public class Student implements Serializable{
 
@@ -10,10 +14,10 @@ public class Student implements Serializable{
 	private String studentName;
 	private String studentKana;
 	private int schoolYear;
-	private datetime withdrawalDate;
+	private ZonedDateTime withdrawalDate;//	private datetime withdrawalDate;
 	private boolean isEnrollment;
-	private datetime regDate;
-	private datetime updateDate;
+	private ZonedDateTime regDate;//	private datetime regDate;
+	private ZonedDateTime updateDate;//	private datetime updateDate;
 
 	public int getStudentId() {
 		return studentId;
@@ -57,10 +61,10 @@ public class Student implements Serializable{
 		this.schoolYear = schoolYear;
 	}
 
-	public datetime getWithdrawalDate() {
+	public ZonedDateTime getWithdrawalDate() {
 		return withdrawalDate;
 	}
-	public void setWithdrawalDate(datetime withdrawalDate) {
+	public void setWithdrawalDate(ZonedDateTime withdrawalDate) {
 		this.withdrawalDate = withdrawalDate;
 	}
 
@@ -71,17 +75,17 @@ public class Student implements Serializable{
 		this.isEnrollment = isEnrollment;
 	}
 
-	public datetime getRegDate() {
+	public ZonedDateTime getRegDate() {
 		return regDate;
 	}
-	public void setRegDate(datetime regDate) {
+	public void setRegDate(ZonedDateTime regDate) {
 		this.regDate = regDate;
 	}
 
-	public datetime getUpdateDate() {
+	public ZonedDateTime getUpdateDate() {
 		return updateDate;
 	}
-	public void setUpdateDate(datetime updateDate) {
+	public void setUpdateDate(ZonedDateTime updateDate) {
 		this.updateDate = updateDate;
 	}
 

@@ -5,9 +5,9 @@
 <div class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
 	<h1 class="fs-1">得点管理システム</h1>
 </div>
-<c:if test="${user.isAuthenticated()}">
+<c:if test="${users.isAuthenticated()}">
 	<div class="nav align-self-end">
-		<span class="nav-item px-2">${user.getName()}様</span>
+		<span class="nav-item px-2">${users.getUsersName()}様</span>
 		<a class="nav-item px-2" href="Logout.action">ログアウト</a>
 	</div>
 </c:if>

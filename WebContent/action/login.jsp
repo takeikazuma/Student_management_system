@@ -28,7 +28,7 @@
 
 	<c:param name="content">
 		<section class="w-75 text-center m-auto border pb-3">
-			<form action = "LoginExecute.action" method="post">
+			<form action = "GetUser.action" method="post">
 				<div id="wrap_box">
 					<h2 class="h3 mb-3 fw-norma bg-secondary bg-opacity-10 py-2">ログイン</h2>
 					<c:if test="${errors.size()>0}">
@@ -41,12 +41,12 @@
 						</div>
 					</c:if>
 					<div>
-						<!-- ＩＤ -->
+						<!-- ユーザID -->
 						<div class="form-floating mx-5">
 							<input class="form-control px-5 fs-5" autocomplete="off"
 								id="id-input" maxlength="20" name="id" placeholder="半角でご入力下さい"
 								style="ime-mode: disabled" type="text" value="${id}" required />
-							<label>ＩＤ</label>
+							<label>ユーザID</label>
 						</div>
 						<!-- パスワード -->
 						<div class="form-floating mx-5 mt-3">

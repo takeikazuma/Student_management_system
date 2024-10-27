@@ -8,7 +8,7 @@
 <title></title>
 <script>
 //ログインページにリダイレクト
-location.href="/Student_management_system/action/Login.action";
+location.href="/Student_management_system/action/GetUser.action";
 </script>
 </head>
 <body>

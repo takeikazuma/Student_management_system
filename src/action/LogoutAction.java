@@ -27,6 +27,6 @@ public class LogoutAction extends Action {
 		//なし
 
 		//JSPへフォワード 7
-		req.getRequestDispatcher("logout.jsp").forward(req, res);
+		req.getRequestDispatcher("confirmDialog.jsp").forward(req, res);
 	}
 }

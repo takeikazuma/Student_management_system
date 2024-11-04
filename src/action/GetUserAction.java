@@ -41,7 +41,7 @@ public class GetUserAction extends Action {
 			session.setAttribute("users", users);
 
 //シーケンスNo.2：メソッドNo.6(学生情報を取得)
-			
+
 
 
 //シーケンスNo.3：メソッドNo.2(出席情報を取得)

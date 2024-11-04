@@ -8,15 +8,18 @@ import java.sql.SQLException;
 import bean.Users;
 
 public class UsersDao extends DAO {
+
 	/**
-	 * getメソッド ユーザIDを指定してユーザインスタンスを1件取得する
+	 * loginメソッド ユーザIDとパスワードで認証する
 	 *
-	 * @param id:int
+	 * @param id:Int
 	 *            ユーザID
-	 * @return Usersクラスのインスタンス 存在しない場合はnull
+	 * @param password:String
+	 *            パスワード
+	 * @return 認証成功:ユーザクラスのインスタンス, 認証失敗:null
 	 * @throws Exception
 	 */
-	public Users get(String id) throws Exception {
+	public Users getUser(String id, String password) throws Exception {
 		// Usersインスタンスを初期化
 		Users users = new Users();
 		// コネクションを確立
@@ -64,23 +67,6 @@ public class UsersDao extends DAO {
 				}
 			}
 		}
-
-		return users;
-	}
-
-	/**
-	 * loginメソッド ユーザIDとパスワードで認証する
-	 *
-	 * @param id:Int
-	 *            ユーザID
-	 * @param password:String
-	 *            パスワード
-	 * @return 認証成功:ユーザクラスのインスタンス, 認証失敗:null
-	 * @throws Exception
-	 */
-	public Users getUser(String id, String password) throws Exception {
-		// Usersクラスのインスタンスを取得
-		Users users = get(id);
 		// ユーザがnullまたはパスワードが一致しない場合
 		//Userテーブルのpasswordはデータ型をcharacter varying(vercharのこと)に変更が必要(落合)
 		if (users == null || !users.getPassword().equals(password)) {

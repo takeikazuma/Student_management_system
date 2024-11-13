@@ -78,10 +78,40 @@
 									<td>${score.student.studentName}</td>
 									<td>${score.subject.subjectName}</td>
 									<td>${score.subjectCode}</td>
-									<td>${score.scoreValue}</td>
+									<td>
+									<!-- 登録する得点を学生番号を用いて取得できるようにする -->
+									    <input type="number" name="point_${score.studentId}"
+									        <c:choose>
+									            <%-- 入力された得点用マップに現在のstudent.noが含まれている場合 --%>
+									            <c:when test="${input_points.containsKey(score.studentId)}">
+									                <%-- 入力されていた得点を初期表示 --%>
+									                value="${input_points.get(score.studentId)}"
+									            </c:when>
+									            <%-- 成績にデータが存在する場合 --%>
+									            <c:when test="${score.scoreValue != -1}">
+									                <%-- 登録されている得点を初期表示 --%>
+									                value="${score.scoreValue}"
+									            </c:when>
+									        </c:choose> />
+									    <div class="mt-2 text-warning">${errors.get(score.studentId)}</div>
+									    <!-- 登録する学生番号を一覧として送る -->
+									    <input type="hidden" name="student_id_set[]" value="${score.studentId}" />
+									</td>
 								</tr>
 							</c:forEach>
 						</table>
+					<!--
+						<input type="hidden" id="test-subject_cd-hidden" name="subject_cd" value="${subject.cd}" />
+						<input type="hidden" id="test-num-hidden" name="num" value="${num}" />
+						<input type="hidden" id="test-f1-hidden" name="f1" value="${f1}" />
+						<input type="hidden" id="test-f2-hidden" name="f2" value="${f2}" />
+						<input type="hidden" id="test-f3-hidden" name="f3" value="${f3}" />
+						<input type="hidden" id="test-f4-hidden" name="f4" value="${f4}" />
+						<div class="mt-3">
+							<input class="btn btn-primary" type="submit" value="登録して再度入力" name="continue">
+					-->
+							<input class="btn btn-secondary" type="submit" value="登録して終了" name="end" />
+						</div>
 					</form>
 				</c:when>
 				<%-- 成績情報が存在しない場合 --%>

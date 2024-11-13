@@ -8,11 +8,10 @@
 	</c:param>
 
 	<c:param name="scripts"></c:param>
-
 	<c:param name="content">
 		<section class="me-4">
 			<h2 class="h3 mb-3 fw-norma bg-secondary bg-opacity-10 py-2 px-4">成績入力</h2>
-			<form action="ClassScoreIn.action" method="post">
+			<form method="get">
 				<div class="row border mx-3 mb-3 py-2 align-items-center rounded" id="filter">
 					<div class="col-2">
 						<label class="form-label" for="student-f1-select">履修学年 </label>
@@ -49,6 +48,47 @@
 					</div>
 				</div>
 			</form>
+			<c:choose>
+				<%-- 成績情報が存在する場合 --%>
+				<c:when test="${score_list.size()>0}">
+					<%-- パラメーターdoneが存在する場合 --%>
+					<c:if test="${!empty done}">
+						<div class="bg-success bg-opacity-50 text-center lh-lg">
+							<p>${done}</p>
+						</div>
+					</c:if>
+					<form method="post" id="test-form" action="#">
+						<%--<div>クラス：${subject.name}（${num}回）</div> --%>
+						<table class="table table-hover">
+							<tr>
+								<th>学生番号</th>
+								<th>月</th>
+								<th>氏名</th>
+								<th>科目名</th>
+								<th>科目コード</th>
+								<th>点数</th>
+								<!--
+								<th class="text-center">削除</th>
+								 -->
+							</tr>
+							<c:forEach var="score" items="${score_list}">
+								<tr>
+									<td>${score.studentId}</td>
+									<td>${score.scoreMonth}月</td>
+									<td>${score.student.studentName}</td>
+									<td>${score.subject.subjectName}</td>
+									<td>${score.subjectCode}</td>
+									<td>${score.scoreValue}</td>
+								</tr>
+							</c:forEach>
+						</table>
+					</form>
+				</c:when>
+				<%-- 成績情報が存在しない場合 --%>
+				<c:when test="${score_list.size()==0}">
+					<div>学生情報が存在しませんでした</div>
+				</c:when>
+			</c:choose>
 		</section>
 	</c:param>
 </c:import>

@@ -12,6 +12,8 @@ public class Score implements Serializable{
 	private int scoreValue;
 	private ZonedDateTime regDate;//	private datetime regDate;
 	private ZonedDateTime updateDate;//	private datetime updateDate;
+	private Student student;//落合追加
+	private Subject subject;//落合追加
 
 	public int getScoreId() {
 		return scoreId;
@@ -60,5 +62,19 @@ public class Score implements Serializable{
 	}
 	public void setUpdateDate(ZonedDateTime updateDate) {
 		this.updateDate = updateDate;
+	}
+	public Student getStudent() {
+		return student;
+	}
+
+	public void setStudent(Student student) {
+		this.student = student;
+	}
+	public Subject getSubject() {
+		return subject;
+	}
+
+	public void setSubject(Subject subject) {
+		this.subject = subject;
 	}
 }

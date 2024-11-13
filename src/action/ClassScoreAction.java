@@ -6,7 +6,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import bean.GradeClass;
+import bean.Score;
 import bean.Subject;
+import dao.ScoreDao;
 import dao.StudentDao;
 import dao.SubjectDao;
 import tool.Action;
@@ -28,6 +30,8 @@ public class ClassScoreAction extends Action {
 		List<GradeClass> class_list = null;
 		SubjectDao subjectDao = new SubjectDao();
 		List<Subject> subject_list = null;
+		ScoreDao scoreDao = new ScoreDao();
+		List<Score> score_list = null;
 
 //	//リクエストパラメータ―の取得 2
 		class_id_str = req.getParameter("class_id");// クラスID
@@ -64,14 +68,16 @@ public class ClassScoreAction extends Action {
 
 //シーケンスNo.23：メソッドNo.5(クラス、科目に一致する成績情報の取得)
 		if (class_id  != 0 && subject_id != 0 && courseYear != 0) {
-//			getScore(int student_id,Int class_id,Int subject_id)
+			score_list = scoreDao.getScore(class_id,subject_id);
 		}
 
 //レスポンス値をセット6
 		// リクエストにクラス一覧をセット
 		req.setAttribute("class_list", class_list);
-		// リクエストにクラス一覧をセット
+		// リクエストに科目一覧をセット
 		req.setAttribute("subject_list", subject_list);
+		// リクエストに成績一覧をセット
+		req.setAttribute("score_list", score_list);
 
 		req.setAttribute("class_id", class_id);
 		req.setAttribute("subject_id",subject_id);

@@ -74,4 +74,59 @@ public class UsersDao extends DAO {
 		}
 		return users;
 	}
+
+	/**
+	 * updateUserメソッド パスワードを更新する
+	 *
+	 * @param user_id:Int
+	 *            ユーザID
+	 * @param newPassword:String
+	 *            パスワード
+	 * @return 更新成功:true, 更新失敗:false
+	 * @throws Exception
+	 */
+	public boolean updateUser(int user_id, String newPassword) throws Exception {
+		boolean result = false;
+		// コネクションを確立
+		Connection connection = getConnection();
+		// プリペアードステートメント
+		PreparedStatement statement = null;
+
+		try {
+			// プリペアードステートメントにSQL文をセット
+			statement = connection.prepareStatement(
+					"UPDATE users "
+					+ "SET password = '" + newPassword + "' "
+					+ "WHERE users_id = " + user_id );
+			// プリペアードステートメントを実行
+			int rSet = statement.executeUpdate();
+
+			if (rSet >= 1) {
+				result = true;
+			} else {
+				result = false;
+			}
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			// プリペアードステートメントを閉じる
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException sqle) {
+					throw sqle;
+				}
+			}
+			// コネクションを閉じる
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException sqle) {
+					throw sqle;
+				}
+			}
+		}
+		return result;
+	}
+
 }

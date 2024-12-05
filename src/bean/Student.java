@@ -10,6 +10,7 @@ public class Student implements Serializable{
 
 	private int studentId;
 	private int gradeClassId;
+	private String gradeClassName;
 	private int admissionYear;
 	private String studentName;
 	private String studentKana;
@@ -31,6 +32,13 @@ public class Student implements Serializable{
 	}
 	public void setGradeClassId(int gradeClassId) {
 		this.gradeClassId = gradeClassId;
+	}
+
+	public String getGradeClassName() {
+		return gradeClassName;
+	}
+	public void setGradeClassName(String gradeClassName) {
+		this.gradeClassName = gradeClassName;
 	}
 
 	public int getAdmissionYear() {

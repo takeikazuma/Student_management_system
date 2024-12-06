@@ -1,18 +1,21 @@
 package bean;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.sql.Date;
 import java.time.ZonedDateTime;
 
 public class Instruction implements Serializable {
 
     private int instructionId;
-    private LocalDate inputDate;
+    private Date inputDate;
     private int usersId;
     private int studentId;
+
     private String instructions;
     private ZonedDateTime regDate;  // テーブルの datetime 型に対応
     private ZonedDateTime updateDate;  // テーブルの datetime 型に対応
+
+    private String usersName;	//JOINして取得したユーザ名（暫定コード）
 
     // instructionId の getter と setter
     public int getInstructionId() {
@@ -23,10 +26,10 @@ public class Instruction implements Serializable {
     }
 
     // inputDate の getter と setter
-    public LocalDate getInputDate() {
+    public Date getInputDate() {
         return inputDate;
     }
-    public void setInputDate(LocalDate inputDate) {
+    public void setInputDate(Date inputDate) {
         this.inputDate = inputDate;
     }
 
@@ -54,19 +57,45 @@ public class Instruction implements Serializable {
         this.instructions = instructions;
     }
 
-    // regDate の getter と setter
-    public ZonedDateTime getRegDate() {
-        return regDate;
-    }
-    public void setRegDate(ZonedDateTime regDate) {
-        this.regDate = regDate;
-    }
+//    // regDate の getter と setter
+//    public ZonedDateTime getRegDate() {
+//        return regDate;
+//    }
+//    public void setRegDate(ZonedDateTime regDate) {
+//        this.regDate = regDate;
+//    }
+//
+//    // updateDate の getter と setter
+//    public ZonedDateTime getUpdateDate() {
+//        return updateDate;
+//    }
+//    public void setUpdateDate(ZonedDateTime updateDate) {
+//        this.updateDate = updateDate;
+//    }
 
-    // updateDate の getter と setter
-    public ZonedDateTime getUpdateDate() {
-        return updateDate;
-    }
-    public void setUpdateDate(ZonedDateTime updateDate) {
-        this.updateDate = updateDate;
-    }
+    public ZonedDateTime getRegDate(){
+		return  regDate;
+	}
+	public void setRegDate(ZonedDateTime regDate) {
+		this.regDate = regDate;
+	}
+
+	public ZonedDateTime getUpdateDate(){
+		return  updateDate;
+	}
+	public void setUpdateDate(ZonedDateTime updateDate) {
+		this.updateDate = updateDate;
+	}
+
+    //SQLでJOINしたユーザ名アクセス用の暫定コード
+	public String getUsersName() {
+		return usersName;
+	}
+	public void setUsersName(String usersName) {
+		this.usersName = usersName;
+	}
+
+
+
+
 }

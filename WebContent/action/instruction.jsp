@@ -5,44 +5,73 @@
     <c:param name="scripts"></c:param>
     <c:param name="content">
         <section class="container mt-4">
-        	<h2 class="h3 mb-3 fw-norma bg-secondary bg-opacity-10 py-2 px-4">成績管理</h2>
+
+        	<h2 class="h3 mb-3 fw-norma bg-secondary bg-opacity-10 py-2">学生指導表入力</h2>
+
             <!-- 学生検索エリア -->
             <div class="search-section mb-4">
-                <h2 class="h3 mb-3 fw-normal bg-secondary bg-opacity-10 py-2 px-4">学生検索</h2>
-                <div class="d-flex align-items-center">
-                    <label for="studentNumber" class="form-label me-3">学生番号</label>
-                    <input type="text" id="studentNumber" name="studentNumber" class="form-control me-3" style="width: 40px;">
-                    <button type="button" class="btn btn-primary me-3">検索</button>
-                    <label id="studentNameLabel" class="fw-bold me-3"></label>
-                    <button type="button" class="btn btn-secondary">指導表表示</button>
+                <div class="form-row">
+
+                	<form action="SelectInstruction.action" method="post">
+                		<div class="form-row">
+	                		<div class="col">
+		                    	<input type="text" class="form-control" placeholder="学生番号" id="student_id" name="student_id" class="form-control me-3">
+		                    </div>
+		                    <div class="col">
+		                    	<input class="w-25 btn btn-lg btn-primary" type="submit" name="search" value="検索" />
+		                    </div>
+							<div class="col">
+		                    	<input class="form-control" type="text"  placeholder="学生氏名"  value="${studentName}" aria-label="" readonly>
+							</div>
+                    		<div class="col">
+                       			<input class="w-25 btn btn-lg btn-primary" type="submit" name="showInstruction" value="指導表表示" />
+                       		</div>
+                    	</div>
+	            	</form>
                 </div>
             </div>
-            <section class="me-4">
-
+			<hr noshade>
             <!-- 指導表リストエリア -->
-            <div class="instruction-list-section">
-                <h2 class="">指導表リスト</h2>
-                <table class="table table-hover">
-                    <thead class="table-secondary">
-                        <tr>
-                            <th>連番</th>
-                            <th>日付</th>
-                            <th>入力者</th>
-                            <th>指導表内容</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <c:forEach var="instruction" items="${inscructionList}">
-                            <tr>
-                                <td>${instruction.seq}</td>
-                                <td>${instruction.date}</td>
-                                <td>${instruction.user_id}</td>
-                                <td>${instruction.instructions}</td>
-                            </tr>
-                        </c:forEach>
-                    </tbody>
-                </table>
+            <form action="SelectInstruction.action" method="post">
+	            <div class="instruction-list-section">
+	                <table class="table table-hover">
+	                    <thead class="table-secondary">
+	                        <tr>
+	                            <th><a href="">No</a></th>
+	                            <th>日付</th>
+	                            <th>入力者</th>
+	                            <th>指導表内容</th>
+	                        </tr>
+	                    </thead>
+	                    <tbody>
+	                        <c:forEach var="instruction" items="${instruction_list}">
+	                            <tr>
+	                                <td><a href=""></a></td>
+	                                <td>${instruction.inputDate}</td>
+	                                <td>${instruction.usersName}</td>
+	                                <td>${instruction.instructions}</td>
+	                            </tr>
+	                        </c:forEach>
+	                    </tbody>
+	                </table>
+	            </div>
+	        </form>
+
+            <!-- 指導表情報入力エリア -->
+			<label for="for_inputdate" class="form-label">入力日</label>
+            <input class="form-control" name="input_date" type="text" value="${input_date}"/>
+            <label for="for_instruction" class="form-label">指導内容</label>
+            <textarea class="form-control" id="input_instructions" rows="3" value="${input_instructions}"></textarea>
+
+            <!-- ページ下部操作ボタンエリア -->
+            <div class="mt-4">
+            	<input class="w-25 btn btn-lg btn-primary" type="button" onclick="window.close()" value="行削除" />
+            	<input class="w-25 btn btn-lg btn-primary" type="button" onclick="window.close()" value="登録" />
+            	<input class="w-25 btn btn-lg btn-primary" type="button" onclick="window.close()" value="修正" />
+            	<input class="w-25 btn btn-lg btn-primary" type="button" onclick="window.close()" value="一覧出力" />
+				<input class="w-25 btn btn-lg btn-primary" type="button" onclick="window.close()" value="閉じる" />
             </div>
+
         </section>
     </c:param>
 </c:import>

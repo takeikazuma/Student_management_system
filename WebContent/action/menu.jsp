@@ -29,7 +29,7 @@
 				</div>
 				<div class="col d-flex align-items-center justify-content-center mx-2 rounded shadow"
 					style="height: 10rem; background-color: #bbd;">
-					<a href="#">指導表入力</a>
+					<a href="Instruction.action">指導表入力</a>
 				</div>
 			</div>
 		</section>

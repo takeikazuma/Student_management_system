@@ -131,4 +131,71 @@ public class StudentDao extends DAO {
 		}
 	    return list;
 	}
+
+	/***
+	 * 年度、クラス名から学生情報を取得
+	 *
+	 * @param admission_year
+	 *            年度
+	 * @param class_name
+	 *            クラス名
+	 * @return 学生情報一覧:List<学生情報:Student>
+	 * @throws Exception
+	 */
+	public List<Student> getStudent(int admission_year, String class_name)
+			throws Exception {
+
+		List<Student> studentList = new ArrayList<Student>();
+
+		Connection connection = getConnection();
+		PreparedStatement statement = null;
+
+		try {
+			// プリペアードステートメントにSQL文をセット
+			statement = connection.prepareStatement(
+					"select * from STUDENT, GRADE_CLASS where STUDENT.GRADE_CLASS_ID = GRADE_CLASS.GRADE_CLASS_ID and ADMISSION_YEAR = ? and GRADE_CLASS.GRADE_CLASS_NAME like ? order by STUDENT_ID asc");
+			statement.setInt(1, admission_year);
+			statement.setString(2, class_name);
+
+			// プリペアードステートメントを実行
+			if (statement != null) {
+				ResultSet rSet = statement.executeQuery();
+
+				while (rSet.next()) {
+					// リザルトセットが存在する場合
+					Student student = new Student();
+					student.setStudentId(rSet.getInt("student_id"));
+					student.setGradeClassId(rSet.getInt("grade_class_id"));
+					student.setAdmissionYear(rSet.getInt("admission_year"));
+					student.setStudentName(rSet.getString("student_name"));
+					student.setStudentKana(rSet.getString("student_kana"));
+					student.setSchoolYear(rSet.getInt("school_year"));
+					//student.setWithdrawalDate(rSet.getDate("withdrawal_date"));
+					student.setIsEnrollment(rSet.getBoolean("is_enrollment"));
+					studentList.add(student);
+				}
+			}
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			// プリペアードステートメントを閉じる
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException sqle) {
+					throw sqle;
+				}
+			}
+			// コネクションを閉じる
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException sqle) {
+					throw sqle;
+				}
+			}
+		}
+
+		return studentList;
+	}
 }

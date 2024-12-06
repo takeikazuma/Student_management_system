@@ -13,7 +13,8 @@
 			<div class="row text-center px-4 fs-3 my-5">
 				<div class="col d-flex align-items-center justify-content-center mx-2 rounded shadow"
 					style="height: 10rem; background-color: #dbb;">
-					<a href="#">出欠席</a>
+					<!-- SelectAttend.actionを指定するとエラーになるので、input_attend.jspを指定 -->
+					<a href="input_attend.jsp">出欠席</a>
 				</div>
 				<div class="col d-flex align-items-center justify-content-center mx-2 rounded shadow"
 					style="height: 10rem; background-color: #bdb;">

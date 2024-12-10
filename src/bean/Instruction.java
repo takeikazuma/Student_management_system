@@ -16,6 +16,7 @@ public class Instruction implements Serializable {
     private ZonedDateTime updateDate;  // テーブルの datetime 型に対応
 
     private String usersName;	//JOINして取得したユーザ名（暫定コード）
+    private String studentName;	//JOINして取得した学生氏名（暫定コード）
 
     // instructionId の getter と setter
     public int getInstructionId() {
@@ -57,22 +58,6 @@ public class Instruction implements Serializable {
         this.instructions = instructions;
     }
 
-//    // regDate の getter と setter
-//    public ZonedDateTime getRegDate() {
-//        return regDate;
-//    }
-//    public void setRegDate(ZonedDateTime regDate) {
-//        this.regDate = regDate;
-//    }
-//
-//    // updateDate の getter と setter
-//    public ZonedDateTime getUpdateDate() {
-//        return updateDate;
-//    }
-//    public void setUpdateDate(ZonedDateTime updateDate) {
-//        this.updateDate = updateDate;
-//    }
-
     public ZonedDateTime getRegDate(){
 		return  regDate;
 	}
@@ -93,6 +78,12 @@ public class Instruction implements Serializable {
 	}
 	public void setUsersName(String usersName) {
 		this.usersName = usersName;
+	}
+	public String getStudentName() {
+		return studentName;
+	}
+	public void setStudentName(String studentName) {
+		this.studentName = studentName;
 	}
 
 

@@ -26,21 +26,21 @@
                 });
 
                 $('#year').on('invalid', function() {
-                    this.setCustomValidity('抽出年を入力してください。');
+                    this.setCustomValidity('入力年を入力してください。');
                 });
                 $('#year').on('input', function() {
                     this.setCustomValidity('');
                 });
 
                 $('#month').on('invalid', function() {
-                    this.setCustomValidity('抽出月を入力してください。');
+                    this.setCustomValidity('入力月を入力してください。');
                 });
                 $('#month').on('input', function() {
                     this.setCustomValidity('');
                 });
 
                 $('#day').on('invalid', function() {
-                    this.setCustomValidity('抽出日を入力してください。');
+                    this.setCustomValidity('入力日を入力してください。');
                 });
                 $('#day').on('input', function() {
                     this.setCustomValidity('');
@@ -67,40 +67,41 @@
                 <div id="wrap_box">
                   <h2 class="h3 mb-3 fw-norma bg-secondary bg-opacity-10 py-2">出欠席入力</h2>
                     <div>
-                        <div class="form-floating mx-5">
-                            <input class="form-control px-5 fs-5 no-spinner" autocomplete="off"
-                                   id="admission_year" name="admission_year" maxlength="4" placeholder="入学年度を入力してください"
-                                   style="ime-mode: disabled" type="number" value="${admission_year}" required />
-                            <label>入学年度</label>
-                        </div>
-                        <div class="form-floating mx-5">
-                            <input class="form-control px-5 fs-5 no-spinner" autocomplete="off"
-                                   id="class_name" name="class_name" placeholder="クラス名を入力してください"
-                                   style="ime-mode: disabled" type="text" value="${class_name}" required />
-                            <label>クラス名</label>
-                        </div>
-                        <div class="form-floating mx-5">
-                            <input class="form-control px-5 fs-5 no-spinner" autocomplete="off"
-                                   id="year" name="year" maxlength="4" placeholder="抽出年を入力してください"
-                                   style="ime-mode: disabled" type="number" value="${year}" required />
-                            <label>抽出年</label>
-                        </div>
-                        <div class="form-floating mx-5">
-                            <input class="form-control px-5 fs-5 no-spinner" autocomplete="off"
-                                   id="month" name="month" maxlength="2" placeholder="抽出月を入力してください"
-                                   style="ime-mode: disabled" type="number" value="${month}" required />
-                            <label>抽出月</label>
-                        </div>
-                        <div class="form-floating mx-5">
-                            <input class="form-control px-5 fs-5 no-spinner" autocomplete="off"
-                                   id="day" name="day" maxlength="2" placeholder="抽出日を入力してください"
-                                   style="ime-mode: disabled" type="number" value="${day}" required />
-                            <label>抽出日</label>
-                        </div>
-                    </div>
-
-                    <div class="mt-4">
-                        <input class="w-25 btn btn-lg btn-primary" type="submit" name="login" value="出欠席入力" />
+						<table><tr>
+	                        <td class="form-floating mx-1">
+	                            <input class="form-control px-4 fs-5 no-spinner" autocomplete="off"
+	                                   id="admission_year" name="admission_year" maxlength="4" placeholder="入学年度を入力してください"
+	                                   style="ime-mode: disabled" type="number" value="${admission_year}" required />
+	                            <label>入学年度</label>
+	                        </td>
+	                        <td class="form-floating mx-1">
+	                            <input class="form-control px-4 fs-5 no-spinner" autocomplete="off"
+	                                   id="class_name" name="class_name" placeholder="クラス名を入力してください"
+	                                   style="ime-mode: disabled" type="text" value="${class_name}" required />
+	                            <label>クラス名</label>
+	                        </td>
+	                        <td class="form-floating mx-1">
+	                            <input class="form-control px-4 fs-5 no-spinner" autocomplete="off"
+	                                   id="year" name="year" maxlength="4" placeholder="入力年を入力してください"
+	                                   style="ime-mode: disabled" type="number" value="${year}" required />
+	                            <label>入力年</label>
+	                        </td>
+	                        <td class="form-floating mx-1">
+	                            <input class="form-control px-4 fs-5 no-spinner" autocomplete="off"
+	                                   id="month" name="month" maxlength="2" placeholder="入力月を入力してください"
+	                                   style="ime-mode: disabled" type="number" value="${month}" required />
+	                            <label>入力月</label>
+	                        </td>
+	                        <td class="form-floating mx-1">
+	                            <input class="form-control px-4 fs-5 no-spinner" autocomplete="off"
+	                                   id="day" name="day" maxlength="2" placeholder="入力日を入力してください"
+	                                   style="ime-mode: disabled" type="number" value="${day}" required />
+	                            <label>入力日</label>
+	                        </td>
+	                        <td class="mx-1">
+		                        <input class="btn btn-lg btn-primary" type="submit" name="login" value="表示" />
+	                        </td>
+						</tr></table>
                     </div>
                 </div>
             </form>
@@ -112,7 +113,7 @@
 					<input id="year" name="year" type="hidden" value="${year}" />
 					<input id="month" name="month" type="hidden" value="${month}" />
 					<input id="day" name="day" type="hidden" value="${day}" />
-					<div>${year}年${month}月${day}日 出欠席一覧</div>
+					<div>${year}年${month}月${day}日 出欠席入力</div>
 					<table>
 						<tr>
 							<td>入学年度</td>
@@ -127,7 +128,7 @@
 							<td>${studentFields.value.get("grade_class_name")}</td>
 							<td>${studentFields.value.get("student_name")}</td>
 							<td>
-								<select name="${studentFields.key}_${String.format("%04d",year)}${String.format("%02d",month)}${String.format("%02d",day)}">
+								<select name="${studentFields.key}_${String.format('%04d',year)}${String.format('%02d',month)}${String.format('%02d',day)}">
 								    <option value="0" <c:if test="${attendMap.get(studentFields.key).get(day) == 0}">selected</c:if>>出</option>
 								    <option value="1" <c:if test="${attendMap.get(studentFields.key).get(day) == 1}">selected</c:if>>欠</option>
 								    <option value="2" <c:if test="${attendMap.get(studentFields.key).get(day) == 2}">selected</c:if>>遅</option>

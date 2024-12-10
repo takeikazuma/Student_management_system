@@ -75,62 +75,36 @@
                             </c:forEach>
                         </div>
                     </c:if>
-
-                    <%-- table>
-                    <tr>
-                        <th>学生番号</th>
-                        <th>クラス</th>
-                        <th>入学年</th>
-                        <th>氏名</th>
-                        <th>カナ</th>
-                        <th>学年</th>
-                        <th></th>
-                        <th>在学</th>
-                    </tr>
-                    <c:if test="${studentFieldsMap.size() > 0}">
-                        <c:forEach var="student" items="${studentFieldsMap}">
-                            <tr>
-                                <td>${student.value.get("student_id")}</td>
-                                <td>${student.value.get("grade_class_name")}</td>
-                                <td>${student.value.get("admission_year")}</td>
-                                <td>${student.value.get("student_name")}</td>
-                                <td>${student.value.get("student_kana")}</td>
-                                <td>${student.value.get("school_year")}</td>
-                                <td>${student.value.get("withdrawal_date")}</td>
-                                <td>${student.value.get("is_enrollment")?"在学":"退学"}</td>
-                            </tr>
-                        </c:forEach>
-                    </c:if>
-                    </table --%>
                     <div>
-                        <div class="form-floating mx-5">
-                            <input class="form-control px-5 fs-5 no-spinner" autocomplete="off"
-                                   id="admission_year" name="admission_year" maxlength="4" placeholder="4桁の数字を入力してください"
-                                   style="ime-mode: disabled" type="number" value="${admission_year}" required />
-                            <label>入学年度</label>
-                        </div>
-                        <div class="form-floating mx-5">
-                            <input class="form-control px-5 fs-5 no-spinner" autocomplete="off"
-                                   id="class_name" name="class_name" placeholder="クラス名を入力してください"
-                                   style="ime-mode: disabled" type="text" value="${class_name}" required />
-                            <label>クラス名</label>
-                        </div>
-                        <div class="form-floating mx-5">
-                            <input class="form-control px-5 fs-5 no-spinner" autocomplete="off"
-                                   id="year" name="year" maxlength="4" placeholder="4桁の数字を入力してください"
-                                   style="ime-mode: disabled" type="number" value="${year}" required />
-                            <label>抽出年</label>
-                        </div>
-                        <div class="form-floating mx-5">
-                            <input class="form-control px-5 fs-5 no-spinner" autocomplete="off"
-                                   id="month" name="month" maxlength="2" placeholder="1～12の数字を入力してください"
-                                   style="ime-mode: disabled" type="number" value="${month}" required />
-                            <label>抽出月</label>
-                        </div>
-                    </div>
-
-                    <div class="mt-4">
-                        <input class="w-25 btn btn-lg btn-primary" type="submit" name="login" value="検索" />
+						<table><tr>
+	                        <td class="form-floating mx-1">
+	                            <input class="form-control px-4 fs-5 no-spinner" autocomplete="off"
+	                                   id="admission_year" name="admission_year" maxlength="4" placeholder="入学年度を入力してください"
+	                                   style="ime-mode: disabled" type="number" value="${admission_year}" required />
+	                            <label>入学年度</label>
+	                        </td>
+	                        <td class="form-floating mx-1">
+	                            <input class="form-control px-4 fs-5 no-spinner" autocomplete="off"
+	                                   id="class_name" name="class_name" placeholder="クラス名を入力してください"
+	                                   style="ime-mode: disabled" type="text" value="${class_name}" required />
+	                            <label>クラス名</label>
+	                        </td>
+	                        <td class="form-floating mx-1">
+	                            <input class="form-control px-4 fs-5 no-spinner" autocomplete="off"
+	                                   id="year" name="year" maxlength="4" placeholder="抽出年を入力してください"
+	                                   style="ime-mode: disabled" type="number" value="${year}" required />
+	                            <label>抽出年</label>
+	                        </td>
+	                        <td class="form-floating mx-1">
+	                            <input class="form-control px-4 fs-5 no-spinner" autocomplete="off"
+	                                   id="month" name="month" maxlength="2" placeholder="抽出月を入力してください"
+	                                   style="ime-mode: disabled" type="number" value="${month}" required />
+	                            <label>抽出月</label>
+	                        </td>
+	                        <td class="mx-1">
+		                        <input class="btn btn-lg btn-primary" type="submit" name="login" value="表示" />
+	                        </td>
+						</tr></table>
                     </div>
                 </div>
             </form>
@@ -138,9 +112,9 @@
 
 	        <c:if test="${studentFieldsMap.size() > 0}">
 				<div>${year}年${month}月 出欠席一覧</div>
-				<table>
+				<table style="width:100%;text-align:center">
 					<tr>
-						<td style="border: 1px solid black;">ID</td>
+						<td style="border: 1px solid black;">氏名</td>
 						<c:forEach var="day" begin="1" end="${length_of_month}">
 							<td style="border: 1px solid black;">${day}</td>
 			            </c:forEach>

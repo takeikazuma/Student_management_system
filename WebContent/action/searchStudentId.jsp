@@ -1,4 +1,4 @@
-<%-- ログインJSP --%>
+<%-- 学生検索JSP --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -62,9 +62,15 @@
 	            	</tr>
             	</thead>
             	<tbody class="table-group-divider">
+            		<% int id = 0; %>
 	            	<c:forEach var="list" items="${student}">
 	            		<tr>
-	            			<td><a href="">${list.getStudentId()}</a></td>
+	            			<% id += 1; %>
+	            			<td class="students">
+	            				<a href="javascript:void(0);"  id = <%= id %>>
+	            					${list.getStudentId()}
+	            				</a>
+	            			</td>
 	            			<td>${list.getGradeClassName()}</td>
 	            			<td>${list.getStudentName()}</td>
 	            		</tr>
@@ -76,10 +82,28 @@
             <div class="mt-4">
 				<input class="w-25 btn btn-lg btn-primary" type="button" onclick="window.close()" value="閉じる" />
             </div>
-
         </section>
-
-        <!-- 呼び出し元に選択した学生番号を返却する処理を追加実装する -->
-
     </c:param>
 </c:import>
+
+<script>
+	// クリックした要素の取得
+	let students = document.getElementsByClassName("students");
+	let student = Array.from(students);
+
+	// クリックした要素の学生番号を取得
+	student.forEach(function(target){
+		target.addEventListener("click", function(){
+			// 親ウィンドウの存在チェック
+			if(!window.opener || window.opener.closed){
+				window.alert('親ウィンドウがありません。');
+				return false;
+			}
+			// 子ウィンドウから親ウィンドウへ学生番号を渡す
+			let callback = window.opener.document.getElementById("student_id");
+			callback.value = target.innerText;
+			// 子ウィンドウを閉じる
+			window.close();
+		})
+	})
+</script>

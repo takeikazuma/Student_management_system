@@ -6,10 +6,6 @@
     <c:param name="scripts">
         <script type="text/javascript">
             $(function() {
-                // カスタムバリデーションメッセージを設定
-                $('#student_id').on('invalid', function() {
-                    this.setCustomValidity('学生番号を入力してください。');
-                });
 
              	// 行選択時の処理
                 window.selectRow = function (row) {
@@ -23,16 +19,27 @@
                     $('#input_instructions').val(cells.eq(3).text().trim()); // 指導表内容
                 };
 
+                //検索ボタン押下時、学生検索画面を開く処理を追加
+                const immediate = () => {
+                	window.open(
+    			            'searchStudentId.jsp',
+    			            'searchStudentId',
+    			            'width=600,height=600,scrollbars=yes,resizable=yes'
+    			        );
+			    };
+			    document.getElementById('search').addEventListener('click', immediate);
+
+
              	// フォーム送信処理
                 window.submitForm = function(operation) {
                     // 操作の種類に応じてフォームを送信
                     document.getElementById("operation").value = operation;
                     console.log(operation);
-
+					//現在入力している学生番号を取得
                     let student_id  = document.getElementById('student_id_hidden');
                     student_id.value =  document.getElementById("student_id").value;
                     console.log(student_id.value);
-
+					//サブミット
                     document.getElementById("instructionForm").submit();
                 };
 
@@ -50,10 +57,10 @@
 			        <form action="SelectInstruction.action" method="post">
 			            <div class="form-row d-flex">
 			                <div class="col-3 mx-1">
-			                    <input type="text" class="form-control" placeholder="学生番号" maxlength="8" id="student_id" name="student_id" value="${studentId}" required />
+			                    <input type="text" class="form-control" placeholder="学生番号" maxlength="8" id="student_id" name="student_id" value="${studentId}" />
 			                </div>
 			                <div class="col-auto mx-1">
-			                    <input class="btn btn-primary" type="submit" name="search" value="検索" />
+			                    <input class="btn btn-primary" id="search" type="button" name="search" value="検索" />
 			                </div>
 			                <div class="col-5 mx-1">
 			                    <input class="form-control" type="text" placeholder="学生氏名" maxlength="20" value="${studentName}" aria-label="" readonly />
@@ -93,45 +100,30 @@
                 </table>
             </div>
 
-<!--             指導表情報入力エリア -->
-<!-- 			<label for="for_inputdate" class="form-label">入力日</label> -->
-<%--             <input class="form-control" name="input_date" type="text" value="${input_date}" placeholder="YYYY-MM-DD"/> --%>
-<!--             <label for="for_instruction" class="form-label">指導内容</label> -->
-<%--             <textarea class="form-control" id="input_instructions" rows="4">${input_instructions}</textarea> --%>
+			<form action="InstructionHandler.action" method="post" id="instructionForm">
+			    <!-- 入力エリア -->
+			    <label for="for_inputdate" class="form-label">入力日</label>
+			    <input class="form-control" name="input_date" type="text" value="${input_date}" placeholder="YYYY-MM-DD" required />
+			    <label for="for_instruction" class="form-label">指導内容</label>
+			    <textarea class="form-control" id="input_instructions" name="input_instructions" rows="4" required>${input_instructions}</textarea>
 
-<!--             ページ下部操作ボタンエリア -->
-<!--      		<div class="d-grid gap-2 d-md-flex justify-content-md-end mt-2"> -->
-<!--             	<input class="w-25 btn btn-primary" type="button" onclick="window.close()" value="行削除" /> -->
-<!--             	<input class="w-25 btn btn-primary" type="button" onclick="window.close()" value="登録" /> -->
-<!--             	<input class="w-25 btn btn-primary" type="button" onclick="window.close()" value="修正" /> -->
-<!--             	<input class="w-25 btn btn-primary" type="button" onclick="window.close()" value="一覧出力" /> -->
-<!-- 				<input class="w-25 btn btn-primary" type="button" onclick="window.close()" value="閉じる" /> -->
-<!--             </div> -->
+			    <!-- hiddenエリア -->
+			    <input type="hidden" id="instructionId" name="instructionId" value="${instructionId}" />
+			    <input type="hidden" id="operation" name="operation" value="" />
+			    <input type="hidden" id="student_id_hidden" name="student_id_hidden" value="${student_id_hidden}" />
 
-				<form action="InstructionHandler.action" method="post" id="instructionForm">
-				    <!-- 入力エリア -->
-				    <label for="for_inputdate" class="form-label">入力日</label>
-				    <input class="form-control" name="input_date" type="text" value="${input_date}" placeholder="YYYY-MM-DD" required />
-				    <label for="for_instruction" class="form-label">指導内容</label>
-				    <textarea class="form-control" id="input_instructions" name="input_instructions" rows="4" required>${input_instructions}</textarea>
+				<!-- メッセージ表示エリア -->
+	            <div class="my-2 text-danger">${message}</div>
 
-				    <!-- hiddenエリア -->
-				    <input type="hidden" id="instructionId" name="instructionId" value="${instructionId}" />
-				    <input type="hidden" id="operation" name="operation" value="" />
-				    <input type="hidden" id="student_id_hidden" name="student_id_hidden" value="${student_id_hidden}" />
-
-					<!-- メッセージ表示エリア -->
-		            <div class="my-2 text-danger">${message}</div>
-
-				    <!-- ボタンエリア -->
-				    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-2">
-				        <button type="button" class="w-25 btn btn-primary" onclick="submitForm('delete')">行削除</button>
-				        <button type="button" class="w-25 btn btn-primary" onclick="submitForm('register')">登録</button>
-				        <button type="button" class="w-25 btn btn-primary" onclick="submitForm('update')">修正</button>
-				        <button type="button" class="w-25 btn btn-primary" onclick="submitForm('export')">一覧出力</button>
-				        <button type="button" class="w-25 btn btn-primary" onclick="window.close()"">閉じる</button>
-				    </div>
-				</form>
+			    <!-- ボタンエリア -->
+			    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-2">
+			        <button type="button" class="w-25 btn btn-primary" onclick="submitForm('delete')">行削除</button>
+			        <button type="button" class="w-25 btn btn-primary" onclick="submitForm('register')">登録</button>
+			        <button type="button" class="w-25 btn btn-primary" onclick="submitForm('update')">修正</button>
+			        <button type="button" class="w-25 btn btn-primary" onclick="submitForm('export')">一覧出力</button>
+			        <button type="button" class="w-25 btn btn-primary" onclick="window.close()">閉じる</button>
+			    </div>
+			</form>
 
         </section>
     </c:param>

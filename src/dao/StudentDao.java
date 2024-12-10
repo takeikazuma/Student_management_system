@@ -198,4 +198,72 @@ public class StudentDao extends DAO {
 
 		return studentList;
 	}
+
+	/***
+	 * 学生番号から学生情報を取得
+	 *
+	 * @param student_id
+	 *            学生番号
+	 * @return 学生情報一覧:List<学生情報:Student>
+	 * @throws Exception
+	 */
+	public List<Student> getStudent(int student_id) throws Exception {
+
+		// リストを初期化
+	    List<Student> list = new ArrayList<>();
+		// データベースへのコネクションを確立
+		Connection connection = getConnection();
+		// プリペアードステートメント
+		PreparedStatement statement = null;
+
+		String sql = "select * from STUDENT WHERE STUDENT_ID = ?";
+
+	    try {
+	    	statement = connection.prepareStatement(sql);
+			statement.setInt(1, student_id);
+
+    		// プリペアードステートメントを実行
+    		ResultSet rSet = statement.executeQuery();
+
+    		// リザルトセットを全件走査
+    		while (rSet.next()) {
+    			// 新しいGradeClassインスタンスを生成し、検索結果をセット
+    			Student student = new Student();
+    			student.setStudentId(rSet.getInt("student_id"));
+				student.setGradeClassId(rSet.getInt("grade_class_id"));
+				student.setAdmissionYear(rSet.getInt("admission_year"));
+				student.setStudentName(rSet.getString("student_name"));
+				student.setStudentKana(rSet.getString("student_kana"));
+				student.setSchoolYear(rSet.getInt("school_year"));
+				student.setIsEnrollment(rSet.getBoolean("is_enrollment"));
+
+    			// リストに追加
+    			list.add(student);
+    		}
+
+	    } catch (Exception e) {
+			throw e;
+		} finally {
+			// プリペアードステートメントを閉じる
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException sqle) {
+					throw sqle;
+				}
+			}
+			// コネクションを閉じる
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException sqle) {
+					throw sqle;
+				}
+			}
+		}
+	    // データが無ければ、空のリストが返る
+	    return list;
+	}
+
+
 }

@@ -7,10 +7,28 @@
         学生番号検索
     </c:param>
 
+    <c:param name="scripts">
+        <script type="text/javascript">
+            $(function() {
+            	// 未入力チェック
+            	let noInput = document.getElementById("gradeClass");
+            	if ($('#name').val() == "" && $('#kana').val() == "" && $('#gradeClass').val() == "") {
+            		noInput.setCustomValidity('検索条件を入力してください。')
+            	}
+            	$('#name').on('input', function() {
+            		noInput.setCustomValidity('');
+            	});
+            	$('#kana').on('input', function() {
+            		noInput.setCustomValidity('');
+            	});
+            	$('#gradeClass').on('input', function() {
+            		noInput.setCustomValidity('');
+            	});
+            });
+        </script>
+    </c:param>
+
     <c:param name="content">
-
-	    <!-- 未入力チェック処理を追加実装する -->
-
         <section class="w-75 text-center m-auto border pb-3">
             <form action="SelectStudentId.action" method="post">
                 <div id="wrap_box">
@@ -19,19 +37,19 @@
                         <!-- 学生氏名 -->
                         <div class="form-floating mx-5">
                         	<label>学生氏名</label>
-                            <input class="form-control px-5 fs-5 no-spinner" name="name"
+                            <input class="form-control px-5 fs-5 no-spinner" name="name" id="name"
                                    type="text" value="${name}"/>
                         </div>
                         <!-- 学生カナ -->
                         <div class="form-floating mx-5 mt-3">
 	                        <label>学生カナ</label>
-                            <input class="form-control px-5 fs-5 no-spinner" name="kana"
+                            <input class="form-control px-5 fs-5 no-spinner" name="kana" id="kana"
                                    type="text" value="${kana}"/>
                         </div>
                         <!-- クラス -->
                         <div class="form-floating mx-5 mt-3">
                         	<label>クラス</label>
-                            <input class="form-control px-5 fs-5 no-spinner" name="gradeClass"
+                            <input class="form-control px-5 fs-5 no-spinner" name="gradeClass" id="gradeClass"
                                    style="ime-mode: disabled" type="text" value="${gradeClass}"/>
                         </div>
                     </div>

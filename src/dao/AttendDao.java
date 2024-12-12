@@ -148,5 +148,68 @@ public class AttendDao extends DAO {
 
 		return attendList;
 	}
+	/**
+	 *
+	 * @param student_list 取得学生リスト
+	 * @return 学生出席状況リスト
+	 * @throws Exception
+	 */
+	public List<Attend> getAttend(List<Student> student_list) throws Exception {
+
+		List<Attend> attendList = new ArrayList<Attend>();
+
+		Connection connection = getConnection();
+		PreparedStatement statement = null;
+
+		try {
+			if(student_list.size() > 0) {
+				// プリペアードステートメントにSQL文をセット
+				statement = connection.prepareStatement(
+						"select * from ATTEND where STUDENT_ID in (" +
+						String.join(",", Collections.nCopies(student_list.size(), "?")) +
+						")");
+				int i = 1;
+				for(Student student: student_list) {
+					// プリペアードステートメントに学生IDをバインド
+					statement.setInt(i, student.getStudentId()); // プレースホルダは1-based index
+					i++;
+				}
+			}
+
+			// プリペアードステートメントを実行
+			if(statement != null) {
+				ResultSet rSet = statement.executeQuery();
+
+				while (rSet.next()) {
+					Attend attend = new Attend();
+					attend.setAttendId(rSet.getInt("ATTEND_ID"));
+					attend.setStudentId(rSet.getString("STUDENT_ID"));
+					attend.setAttendDate(rSet.getDate("ATTEND_DATE"));
+					attend.setAttendStatus(rSet.getInt("ATTEND_STATUS"));
+					attendList.add(attend);
+				}
+			}
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			// プリペアードステートメントを閉じる
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException sqle) {
+					throw sqle;
+				}
+			}
+			// コネクションを閉じる
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException sqle) {
+					throw sqle;
+				}
+			}
+		}
+		return attendList;
+	}
 
 }

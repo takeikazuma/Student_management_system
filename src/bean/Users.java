@@ -13,6 +13,7 @@ public class Users implements Serializable{
 	private String usersName;
 	private String password;
 	private int gradeClassId;
+	private String gradeClassName;
 	private ZonedDateTime regDate;//	private datetime regDate;
 	private ZonedDateTime updateDate;//	private datetime updateDate;
 
@@ -42,6 +43,13 @@ public class Users implements Serializable{
 	}
 	public void setGradeClassId(int gradeClassId) {
 		this.gradeClassId = gradeClassId;
+	}
+
+	public String getGradeClassName() {
+		return gradeClassName;
+	}
+	public void setGradeClassName(String gradeClassName) {
+		this.gradeClassName = gradeClassName;
 	}
 
 	public ZonedDateTime getRegDate() {

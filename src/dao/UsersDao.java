@@ -29,7 +29,11 @@ public class UsersDao extends DAO {
 
 		try {
 			// プリペアードステートメントにSQL文をセット
-			statement = connection.prepareStatement("select * from users where users_id=?");
+			statement = connection.prepareStatement(
+					"SELECT * "
+					+ "FROM users INNER JOIN grade_class "
+					+ "ON users.grade_class_id = grade_class.grade_class_id "
+					+ "WHERE users_id=?");
 			// プリペアードステートメントに教員IDをバインド
 			statement.setInt(1, Integer.parseInt(id));
 			// プリペアードステートメントを実行
@@ -42,6 +46,7 @@ public class UsersDao extends DAO {
 				users.setPassword(rSet.getString("password"));
 				users.setUsersName(rSet.getString("users_name"));
 				users.setGradeClassId(rSet.getInt("grade_class_id"));
+				users.setGradeClassName(rSet.getString("grade_class_name"));
 			} else {
 				// リザルトセットが存在しない場合
 				// Usersインスタンスにnullをセット

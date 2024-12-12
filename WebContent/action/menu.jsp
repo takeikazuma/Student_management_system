@@ -10,6 +10,7 @@
 	<c:param name="content">
 		<section class="me-4">
 			<h2 class="h3 mb-3 fw-norma bg-secondary bg-opacity-10 py-2 px-4">メニュー</h2>
+
 			<div class="row text-center px-4 fs-3 my-5">
 				<div class="col d-flex align-items-center justify-content-center mx-2 rounded shadow"
 					style="height: 10rem; background-color: #dbb;">
@@ -33,6 +34,37 @@
 					<a href="Instruction.action">指導表入力</a>
 				</div>
 			</div>
+
+			<h3 class="h3 mb-3 fw-norma bg-secondary bg-opacity-10 py-2 px-4">★欠席アラート★</h3>
+			<table class="table table-hover" >
+				<thead>
+					<tr>
+						<th>累計欠席日数</th>
+						<th>クラス</th>
+						<th>学生番号</th>
+						<th>氏名</th>
+					</tr>
+				</thead>
+				<tbody class="table-group-divider">
+					<%
+						int id = 0;
+						pageContext.setAttribute("id", id);
+					%>
+					<c:forEach var="list" items="${alertAttendList}">
+						<tr>
+							<td>${totalAttendNum[id]}</td>
+							<td>${gradeClass}</td>
+							<td>${list.getStudentId()}</td>
+							<td>${alertStudentName[id]}</td>
+						</tr>
+						<%
+							id += 1;
+							pageContext.setAttribute("id", id);
+						%>
+					</c:forEach>
+				</tbody>
+			</table>
+
 		</section>
 	</c:param>
 </c:import>

@@ -19,7 +19,7 @@
                     $('#input_instructions').val(cells.eq(3).text().trim()); // 指導表内容
                 };
 
-                //検索ボタン押下時、学生検索画面を開く処理を追加
+                //検索ボタン押下時学生検索画面を開く処理を追加
                 const immediate = () => {
                 	window.open(
     			            'searchStudentId.jsp',
@@ -49,7 +49,7 @@
     <c:param name="content">
         <section class="container mt-4">
 
-        	<h2 class="h3 mb-3 fw-norma bg-secondary bg-opacity-10 py-2">学生指導表入力</h2>
+        	<h2 class="h3 mb-3 fw-norma bg-secondary bg-opacity-10 py-2 px-4">学生指導表入力</h2>
 
             <!-- 学生検索エリア -->
 			<div class="search-section mb-4">
@@ -91,9 +91,9 @@
                                 <td>
                                 	<a href="javascript:void(0);" onclick="selectRow(this.closest('tr'))"> ${status.index + 1}</a>
                                 </td>
-                                <td>${instruction.inputDate}</td>
-                                <td>${instruction.usersName}</td>
-                                <td>${instruction.instructions}</td>
+                                <td><c:out value="${instruction.inputDate}"></c:out></td>
+                                <td><c:out value="${instruction.usersName}"></c:out></td>
+                                <td><c:out value="${instruction.instructions}"></c:out></td>
                             </tr>
                         </c:forEach>
                     </tbody>

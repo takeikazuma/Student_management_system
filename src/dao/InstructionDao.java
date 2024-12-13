@@ -34,8 +34,7 @@ public class InstructionDao extends DAO {
 					"    INSTRUCTION.INPUT_DATE, " +
 					"    INSTRUCTION.USERS_ID, " +
 					"    USERS.USERS_NAME, " +
-					"    INSTRUCTION.INSTRUCTIONS, " +
-					"    INSTRUCTION.REG_DATE " +
+					"    INSTRUCTION.INSTRUCTIONS " +
 					"FROM INSTRUCTION " +
 					"LEFT JOIN USERS " +
 					"ON " +
@@ -281,8 +280,6 @@ public class InstructionDao extends DAO {
 
 	}
 
-
-
 	public boolean deleteInstruction(Instruction instruction) throws Exception {
 
 		// コネクションを確立
@@ -298,7 +295,6 @@ public class InstructionDao extends DAO {
 				"	INSTRUCTION_ID = ? ";
 
 		try {
-
 			// プリペアードステートメンにINSERT文をセット
 			statement = connection.prepareStatement(sql);
 			// プリペアードステートメントに値をバインド

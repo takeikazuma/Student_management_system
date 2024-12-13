@@ -1,12 +1,13 @@
 package action;
 
-import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import com.sun.org.apache.xerces.internal.impl.xpath.regex.ParseException;
 
 import bean.Instruction;
 import bean.Users;
@@ -18,66 +19,88 @@ public class RegistrationInstructionAction extends Action {
 	@Override
 	public void execute(HttpServletRequest req, HttpServletResponse res) throws Exception {
 
-			//ローカル変数の宣言 1
-			InstructionDao instructionDao = new InstructionDao();
+		//変数宣言を整理
+		InstructionDao instructionDao = new InstructionDao();
+		Users users = null;
 
-			Users users = null;
+		//リクエストパラメータ
+		int studentId = 0;
+		String studentIdStr = req.getParameter("studentIdHidden");
+		String inputDateStr = req.getParameter("inputDate");
+		String instructionContent = req.getParameter("inputInstructions");
 
-			//リクエストパラメタ用
-			int student_id;
-			String student_id_str = "";
-			String input_date_str = "";
-			String instruction_content = "";
+		//セッション情報を取得
+		HttpSession session = req.getSession(true);
+		Object sessionUser = session.getAttribute("users");
 
-			// セッション情報を取得
-			HttpSession session = req.getSession(true);
-			// セッションからログイン情報を取得
-			Object sessionUser = session.getAttribute("users");
-			// セッション情報をUsers型にキャスト
-			users = (Users)sessionUser;
+		//セッションユーザーが取得できない場合の処理
+		if (sessionUser == null) {
+		    req.setAttribute("message", "ログインしてください。");
+		    req.getRequestDispatcher("login.jsp").forward(req, res);
+		    return;
+		}
 
-			//リクエストパラメータ―の取得 2
-			student_id_str = req.getParameter("student_id_hidden");
-			student_id = Integer.parseInt(student_id_str);	//String→int
-			input_date_str = req.getParameter("input_date");
-			instruction_content = req.getParameter("input_instructions");
+		//セッション情報をUsers型にキャスト
+		users = (Users) sessionUser;
 
-			// 日付の文字列を java.sql.Date に変換
-			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); // 日付のフォーマット
-			java.util.Date utilDate = format.parse(input_date_str); // java.util.Date に変換
-			Date input_date = new Date(utilDate.getTime()); // java.sql.Date に変換
+		//学生IDの取得と変換
+		try {
+		    studentId = Integer.parseInt(studentIdStr); // String→int
+		} catch (NumberFormatException e) {
+			//日付が正しくなかった場合（空欄で来てしまった場合もこちら）
+	        req.setAttribute("message", "日付の形式が正しくありません。");
+		}
 
-			Instruction instruction = new Instruction();
-			instruction.setInputDate(input_date);
-			instruction.setUsersId(users.getUsersId());
-			instruction.setInstructions(instruction_content);
-			instruction.setStudentId(student_id);
+		// 日付の変換
+		java.sql.Date inputDate = null;
+		try {
+		    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		    java.util.Date utilDate = format.parse(inputDateStr);
+		    inputDate = new java.sql.Date(utilDate.getTime()); // java.sql.Date に変換
 
-			//指導表テーブルに更新
-			if (!(instructionDao.saveInstruction(instruction))){
-				//エラーが発生した場合
+		} catch (ParseException e) {
+		    req.setAttribute("message", "無効な日付が入力されました。");
+		    req.getRequestDispatcher("error.jsp").forward(req, res);
+		    return; // 処理終了
+		}
 
-			}else{
-				//正常終了した場合
+		// Instructionオブジェクトにデータをセット
+		Instruction instruction = new Instruction();
+		instruction.setInputDate(inputDate);
+		instruction.setUsersId(users.getUsersId());
+		instruction.setInstructions(instructionContent);
+		instruction.setStudentId(studentId);
 
-				List<Instruction> instruction_list = null;
+		// 指導表テーブルに更新
+		boolean isUpdated = instructionDao.saveInstruction(instruction);
 
-				//指導表テーブルからデータ取得
-				instruction_list = instructionDao.getInstruction(student_id);
+		if (!isUpdated) {
+		    // エラー発生時の処理
+		    req.setAttribute("message", "指導表の更新に失敗しました。");
+		    req.getRequestDispatcher("error.jsp").forward(req, res);
+		    return;
+		}
 
-				if (instruction_list.size() != 0) { // データが取得された場合
-					// リクエストに指導表データをセット
-					req.setAttribute("instruction_list", instruction_list);
+		// 正常終了後、指導表データを取得
+		List<Instruction> instructionList = instructionDao.getInstruction(studentId);
 
-					//学生氏名をリクエストにセット
-					String studentName = instruction_list.get(0).getStudentName();
-				    req.setAttribute("studentName", studentName);
-				}
+		// 指導表データが取得できた場合
+		if (!instructionList.isEmpty()) {
+		    req.setAttribute("instruction_list", instructionList);
 
-			}
+		    // 学生氏名をリクエストにセット
+		    String studentName = instructionList.get(0).getStudentName();
+		    req.setAttribute("studentName", studentName);
+		}
 
-			//リクエストに学生番号、学生氏名をセット
-			req.setAttribute("studentId", student_id_str);
+		// 学生番号をリクエストにセット
+		req.setAttribute("student_id", studentIdStr);
+
+		// フォワード
+		req.getRequestDispatcher("instruction.jsp").forward(req, res);
+
+
+
 
 	}
 }

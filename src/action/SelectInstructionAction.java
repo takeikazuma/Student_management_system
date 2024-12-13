@@ -21,54 +21,58 @@ public class SelectInstructionAction extends Action {
 	@Override
 	public void execute(HttpServletRequest req, HttpServletResponse res) throws Exception {
 
-		//ローカル変数の宣言
-		String url = "";
-		int student_id;
-		String student_id_str = "";
+		//変数の宣言
+		String url = "instruction.jsp";
+		int studentId = 0;
+		String studentIdStr = req.getParameter("student_id");
 
+		//DAOインスタンス
 		InstructionDao instructionDao = new InstructionDao();
 		StudentDao studentDao = new StudentDao();
-		List<Instruction> instruction_list = null;
-		List<Student> student_list = null;
+		List<Instruction> instructionList = null;
+		List<Student> studentList = null;
 
-		//リクエストパラメータ―の取得 2
-		student_id_str = req.getParameter("student_id");
-		student_id = Integer.parseInt(student_id_str);	//String→int
+		//学生番号の取得
+		try {
+		    studentId = Integer.parseInt(studentIdStr); // String→int
 
-		//学生番号の存在チェック
-		student_list = studentDao.getStudent(student_id);
-
-		//リクエストに学生番号をセット
-		req.setAttribute("studentId", student_id_str);
-
-		//データが存在しない場合
-		if (student_list.size() == 0) {
-
-			// エラーメッセージをセット
-			req.setAttribute("message", "入力された学生番号は存在しません。");
-
-		}else{
-
-			//学生氏名をリクエストに設定
-			if (!student_list.isEmpty()) {
-			    String studentName = student_list.get(0).getStudentName();
-			    req.setAttribute("studentName", studentName);
-			}
-
-			//指導表テーブルからデータ取得 3
-			instruction_list = instructionDao.getInstruction(student_id);	//指導表データ取得
-
-			if (instruction_list.size() != 0) { // データが取得された場合
-				// リクエストに指導表データをセット
-				req.setAttribute("instruction_list", instruction_list);
-
-			}
-
+		} catch (NumberFormatException e) {
+			//空欄で来た場合もこちら
+		    req.setAttribute("message", "無効な学生番号が入力されました。");
+		    req.getRequestDispatcher(url).forward(req, res);
+		    return; //処理終了
 		}
 
+		//学生番号の存在チェック
+		studentList = studentDao.getStudent(studentId);
+
+		//学生番号が存在しない場合
+		if (studentList.isEmpty()) {
+		    req.setAttribute("message", "入力された学生番号は存在しません。");
+
+		} else {
+		    //学生氏名をリクエストに設定
+		    String studentName = studentList.get(0).getStudentName();
+		    req.setAttribute("studentName", studentName);
+
+		    //指導表データを取得
+		    instructionList = instructionDao.getInstruction(studentId);
+
+		    //指導表データが存在する場合
+		    if (!instructionList.isEmpty()) {
+		    	//リクエストに該当データをセット
+		        req.setAttribute("instruction_list", instructionList);
+		    }
+		}
+
+		//学生番号をリクエストにセット
+		req.setAttribute("student_id", studentIdStr);
+
 		//フォワード
-		url = "instruction.jsp";
 		req.getRequestDispatcher(url).forward(req, res);
+
+
+
 	}
 
 }

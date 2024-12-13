@@ -1,4 +1,5 @@
 package action;
+
 import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.util.List;
@@ -12,99 +13,83 @@ import dao.InstructionDao;
 import dao.StudentDao;
 import tool.Action;
 
-
 public class ExportInstructionAction extends Action {
 
-	@Override
-	public void execute(HttpServletRequest req, HttpServletResponse res) throws Exception {
+    // 定数
+    private static final String COMMA = ",";
+    private static final String NEWLINE = "\r\n";
+    private static final String DQ = "\"";
 
-		//データの取得
-		//ローカル変数の宣言
-		int student_id;
-		String student_id_str = "";
+    @Override
+    public void execute(HttpServletRequest req, HttpServletResponse res) throws Exception {
 
-		InstructionDao instructionDao = new InstructionDao();
-		StudentDao studentDao = new StudentDao();
-		List<Instruction> instruction_list = null;
-		List<Student> student_list = null;
+    	try {
 
-		//リクエストパラメータ―の取得 2
-		student_id_str = req.getParameter("student_id_hidden");
-		student_id = Integer.parseInt(student_id_str);	//String→int
+    		//リクエストパラメータ―の取得
+            String studentIdStr = req.getParameter("studentIdHidden");
+            int studentId = Integer.parseInt(studentIdStr);
 
-		//学生番号の存在チェック
-		student_list = studentDao.getStudent(student_id);
+            // 学生データの取得
+            StudentDao studentDao = new StudentDao();
+            List<Student> studentList = studentDao.getStudent(studentId);
 
-		//リクエストに学生番号をセット
-		req.setAttribute("studentId", student_id_str);
+            if (studentList.isEmpty()) {
+                req.setAttribute("message", "出力対象のデータが存在しません。");
+                return;
+            }
 
-		//データが存在しない場合
-		if (student_list.size() == 0) {
-			// エラーメッセージをセット
-			req.setAttribute("message", "出力対象のデータが存在しません。");
+            // 指導データの取得
+            InstructionDao instructionDao = new InstructionDao();
+            List<Instruction> instructionList = instructionDao.getInstruction(studentId);
 
-		}else{
+            if (instructionList.isEmpty()) {
+                req.setAttribute("message", "指導データが存在しません。");
+                return;
+            }
 
-			//指導表テーブルからデータ取得
-			instruction_list = instructionDao.getInstruction(student_id);	//指導表データ取得
+            // CSV生成
+            String studentName = studentList.get(0).getStudentName();
+            generateCsv(res, studentIdStr, studentName, instructionList);
 
-			if (instruction_list.size() != 0) { // データが取得された場合
-				// リクエストに指導表データをセット
-				req.setAttribute("instruction_list", instruction_list);
+        } catch (NumberFormatException e) {
+            req.setAttribute("message", "無効な学生番号が入力されました。");
+        } catch (Exception e) {
+            req.setAttribute("message", "データの処理中にエラーが発生しました。");
+            //↓やらないほうがいい？？
+            e.printStackTrace();
+        }
+    }
 
-				//カンマ
-				final String COMMA = ",";
-				//改行
-				final String NEW_LINE= "\r\n";
+    private void generateCsv(HttpServletResponse res, String studentIdStr, String studentName, List<Instruction> instructionList) throws Exception {
 
-				String studentName = student_list.get(0).getStudentName();
+        String filename = "指導表.csv";
+        res.setHeader("Content-Type", "text/csv; charset=Shift_JIS");
+        res.setHeader("Content-Disposition", "attachment; filename=\"" + URLEncoder.encode(studentName + "_" + filename, "UTF-8") + "\"");
 
-				//学生氏名をリクエストに設定
-				if (!student_list.isEmpty()) {
-				    req.setAttribute("studentName", studentName);
-				}
+        try (PrintWriter out = res.getWriter()) {
 
-				//CSV出力処理
-		        String filename = "指導表.csv";
+            // ヘッダの生成
+            out.append("学生番号,学生氏名,日付,入力者,内容").append(NEWLINE);
 
-//		        res.setHeader("Content-Type", "text/csv; charset=UTF-8");
-		        res.setHeader("Content-Type", "text/csv; charset=Shift_JIS");
-		        res.setHeader("Content-Disposition", "attachment; filename=\"" + URLEncoder.encode(studentName +  "_"+ filename, "UTF-8") + "\"");
+            // 行データの生成
+            StringBuilder row = new StringBuilder();
 
-		        PrintWriter out = res.getWriter();
+            for (Instruction i : instructionList) {
+            	row.setLength(0); // 初期化
+            	row.append(addDoubleQuotation(studentIdStr)).append(COMMA)
+                          .append(addDoubleQuotation(i.getStudentName())).append(COMMA)
+                          .append(addDoubleQuotation(String.valueOf(i.getInputDate()))).append(COMMA)
+                          .append(addDoubleQuotation(i.getUsersName())).append(COMMA)
+                          .append(addDoubleQuotation(i.getInstructions())).append(NEWLINE);
+                //一行分のデータをCSV用のデータに追記
+            	out.append(row.toString());
+            }
+        }
+    }
 
-		        //ヘッダを作る
-		        out.append("学生番号,学生氏名,日付,入力者,内容");
-		        out.append(NEW_LINE);
-
-		        //データ取得分行を作成する
-		        for (Instruction i : instruction_list) {
-		        	out.append(addDoubleQutation(student_id_str));
-		        	out.append(COMMA);
-		        	out.append(addDoubleQutation(i.getStudentName()));
-		        	out.append(COMMA);
-		        	out.append(addDoubleQutation(String.valueOf(i.getInputDate())));
-		        	out.append(COMMA);
-		        	out.append(addDoubleQutation(i.getUsersName()));
-		        	out.append(COMMA);
-		        	out.append(addDoubleQutation(i.getInstructions()));
-		        	out.append(NEW_LINE);
-		        }
-
-		        out.close();
-			}
-
-		}
-
-	}
-
-
-	private String addDoubleQutation(String content){
-
-		//ダブルクォーテーション
-		final String DQ = "\"";
-		return DQ + content + DQ;
-
-	}
-
+    private String addDoubleQuotation(String content) {
+    	//ダブルクォーテーションで囲む
+        return DQ + content + DQ;
+    }
 }
+

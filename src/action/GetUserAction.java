@@ -112,10 +112,10 @@ public class GetUserAction extends Action {
 			}
 
 			// メニューに表示する情報の格納
-			req.setAttribute("alertAttendList", alertAttendList);
-			req.setAttribute("totalAttendNum", totalAttendNum);
-			req.setAttribute("alertStudentName", alertStudentName);
-			req.setAttribute("gradeClass", users.getGradeClassName());
+			session.setAttribute("alertAttendList", alertAttendList);
+			session.setAttribute("totalAttendNum", totalAttendNum);
+			session.setAttribute("alertStudentName", alertStudentName);
+			session.setAttribute("gradeClass", users.getGradeClassName());
 			// リダイレクト
 			req.getRequestDispatcher("menu.jsp").forward(req, res);
 		} else {

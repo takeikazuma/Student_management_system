@@ -27,14 +27,29 @@ public class ExportInstructionAction extends Action {
 
     		//リクエストパラメータ―の取得
             String studentIdStr = req.getParameter("studentIdHidden");
-            int studentId = Integer.parseInt(studentIdStr);
+            int studentId = 0;
+
+
+            //学生番号の取得
+    		try {
+    		    studentId = Integer.parseInt(studentIdStr); // String→int
+
+    		} catch (NumberFormatException e) {
+    			//空欄で来た場合もこちら
+    			req.setAttribute("student_id",studentIdStr);
+    		    req.setAttribute("message", "無効な学生番号が入力されました。");
+    		    req.getRequestDispatcher("instruction.jsp").forward(req, res);
+    		    return; //処理終了
+    		}
 
             // 学生データの取得
             StudentDao studentDao = new StudentDao();
             List<Student> studentList = studentDao.getStudent(studentId);
 
             if (studentList.isEmpty()) {
-                req.setAttribute("message", "出力対象のデータが存在しません。");
+            	req.setAttribute("student_id",studentIdStr);
+                req.setAttribute("message", "入力された学生番号のデータは存在しません。");
+                req.getRequestDispatcher("instruction.jsp").forward(req, res);
                 return;
             }
 
@@ -43,12 +58,17 @@ public class ExportInstructionAction extends Action {
             List<Instruction> instructionList = instructionDao.getInstruction(studentId);
 
             if (instructionList.isEmpty()) {
-                req.setAttribute("message", "指導データが存在しません。");
+            	req.setAttribute("student_id",studentIdStr);
+                req.setAttribute("message", "指導表データが存在しません。");
+                req.getRequestDispatcher("instruction.jsp").forward(req, res);
                 return;
             }
 
-            // CSV生成
+
             String studentName = studentList.get(0).getStudentName();
+            req.setAttribute("studentName",studentName);
+
+            // CSV生成
             generateCsv(res, studentIdStr, studentName, instructionList);
 
         } catch (NumberFormatException e) {

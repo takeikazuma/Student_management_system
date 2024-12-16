@@ -20,7 +20,7 @@ ${param.scripts}
 <body>
 	<div id="wrapper" class="container">
 		<header
-			class="d-flex flex-wrap justify-content-center py-3 px-5 mb-4 border-bottom border-2 bg-primary bg-opacity-10 bg-gradient">
+			class="d-flex flex-wrap justify-content-center py-2 px-4 mb-3 border-bottom border-2 bg-primary bg-opacity-10 bg-gradient">
 			<c:import url="/common/header.jsp" />
 		</header>
 
@@ -28,14 +28,14 @@ ${param.scripts}
 			<c:choose>
 				<%-- ログイン済みの場合 --%>
 				<c:when test="${users.isAuthenticated()}">
-					<nav class="col-3" style="height:40rem;">
+					<nav class="col-2" style="height:40rem;">
 						<c:import url="/common/navigation.jsp" />
 					</nav>
-					<main class="col-9 border-start"> ${param.content} </main>
+					<main class="col-10 border-start"> ${param.content} </main>
 				</c:when>
 				<%-- 未ログインの場合 --%>
 				<c:otherwise>
-					<main class="col-8"> ${param.content} </main>
+					<main class="col-10"> ${param.content} </main>
 				</c:otherwise>
 			</c:choose>
 		</div>

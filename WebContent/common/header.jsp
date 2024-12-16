@@ -4,7 +4,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <div class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
-    <h1 class="fs-1">経理本科教務システム</h1>
+    <h1 class="fs-3">経理本科教務システム</h1>
 </div>
 
 <c:if test="${users.isAuthenticated()}">

@@ -56,8 +56,8 @@
 					</nav>
 					<main class="col-10 border-start">
 						<section>
-							<p>エラーが発生しました</p>
-							<p>${message}</p>
+							<p class="my-2 text-danger">エラーが発生しました</p>
+							<p class="my-2 text-danger">${message}</p>
 						</section>
 					</main>
 				</c:when>
@@ -65,16 +65,15 @@
 				<c:otherwise>
 					<main class="col-12">
 						<section>
-							<p>エラーが発生しました</p>
-							<p>${message}</p>
+							<p class="my-2 text-danger">エラーが発生しました</p>
+							<p class="my-2 text-danger">${message}</p>
 						</section>
 					</main>
 				</c:otherwise>
 			</c:choose>
 		</div>
 		<footer	class="py-2 my-4 bg-dark bg-opacity-10 border-top border-3 align-bottom">
-			<p class="text-center text-muted mb-0">&copy; 2024 TIC </p>
-			<p class="text-center text-muted mb-0">大原学園</p>
+			<p class="text-center text-muted mb-0"><small>&copy; 2023 TIC 大原学園</small></p>
 		</footer>
 
 	</div>

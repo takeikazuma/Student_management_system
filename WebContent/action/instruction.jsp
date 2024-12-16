@@ -18,6 +18,7 @@
                     const cells = $(row).find('td');
                     $('input[name="inputDate"]').val(cells.eq(1).text()); // 日付
                     $('#inputInstructions').val(cells.eq(3).text().trim()); // 指導表内容
+                    console.log("ここ通ってるよ");
                 };
 
                 //検索ボタン押下時学生検索画面を開く処理を追加
@@ -30,7 +31,6 @@
 			    };
 			    document.getElementById('search').addEventListener('click', immediate);
 
-
              	// フォーム送信処理
                 window.submitForm = function(operation) {
                     // 操作の種類に応じてフォームを送信
@@ -42,7 +42,6 @@
 					//サブミット
                     document.getElementById("instructionForm").submit();
                 };
-
             });
         </script>
     </c:param>
@@ -133,7 +132,7 @@
 				    	<button type="button" class="w-25 btn btn-primary" onclick="submitForm('update')">修正</button>
 				        <button type="button" class="w-25 btn btn-primary" onclick="submitForm('delete')">行削除</button>
 				        <button type="button" class="w-25 btn btn-primary" onclick="submitForm('export')">CSV出力</button>
-				        <button type="button" class="w-25 btn btn-primary" onclick="window.close()">閉じる</button>
+<!-- 				        <button type="button" class="w-25 btn btn-primary" onclick="window.close()">閉じる</button> -->
 				    </div>
 				</form>
 			</div>

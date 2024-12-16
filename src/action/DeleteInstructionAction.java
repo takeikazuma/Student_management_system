@@ -59,6 +59,8 @@ public class DeleteInstructionAction extends Action {
 		//リクエストに学生番号、学生氏名をセット
 		req.setAttribute("student_id", studentIdStr);
 
+		req.getRequestDispatcher("instruction.jsp").forward(req, res);
+
 	}
 
 }

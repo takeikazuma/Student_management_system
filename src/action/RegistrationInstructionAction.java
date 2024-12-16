@@ -7,8 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.sun.org.apache.xerces.internal.impl.xpath.regex.ParseException;
-
 import bean.Instruction;
 import bean.Users;
 import dao.InstructionDao;
@@ -59,7 +57,7 @@ public class RegistrationInstructionAction extends Action {
 		    java.util.Date utilDate = format.parse(inputDateStr);
 		    inputDate = new java.sql.Date(utilDate.getTime()); // java.sql.Date に変換
 
-		} catch (ParseException e) {
+		} catch (Exception e) {
 		    req.setAttribute("message", "無効な日付が入力されました。");
 		    return; // 処理終了
 		}
@@ -76,7 +74,7 @@ public class RegistrationInstructionAction extends Action {
 
 		if (!isUpdated) {
 		    // エラー発生時の処理
-		    req.setAttribute("message", "指導表の更新に失敗しました。");
+		    req.setAttribute("message", "指導表の登録に失敗しました。");
 		    req.getRequestDispatcher("error.jsp").forward(req, res);
 		    return;
 		}
@@ -96,7 +94,6 @@ public class RegistrationInstructionAction extends Action {
 		// 学生番号をリクエストにセット
 		req.setAttribute("student_id", studentIdStr);
 
-		// フォワード
 		req.getRequestDispatcher("instruction.jsp").forward(req, res);
 
 	}

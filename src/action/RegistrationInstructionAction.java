@@ -47,8 +47,9 @@ public class RegistrationInstructionAction extends Action {
 		try {
 		    studentId = Integer.parseInt(studentIdStr); // String→int
 		} catch (NumberFormatException e) {
-			//日付が正しくなかった場合（空欄で来てしまった場合もこちら）
-	        req.setAttribute("message", "日付の形式が正しくありません。");
+			//学生番号のキャストができなかった場合（空欄で来てしまった場合もこちら）
+	        req.setAttribute("message", "学生番号の入力形式が正しくありません。");
+	        return;
 		}
 
 		// 日付の変換
@@ -60,7 +61,6 @@ public class RegistrationInstructionAction extends Action {
 
 		} catch (ParseException e) {
 		    req.setAttribute("message", "無効な日付が入力されました。");
-		    req.getRequestDispatcher("error.jsp").forward(req, res);
 		    return; // 処理終了
 		}
 
@@ -98,9 +98,6 @@ public class RegistrationInstructionAction extends Action {
 
 		// フォワード
 		req.getRequestDispatcher("instruction.jsp").forward(req, res);
-
-
-
 
 	}
 }

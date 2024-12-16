@@ -90,7 +90,8 @@ public class UpdateInstructionAction  extends Action  {
 	    int studentId = Integer.parseInt(req.getParameter("studentIdHidden"));
 	    String inputDateStr = req.getParameter("inputDate");
 	    String instructionContent = req.getParameter("inputInstructions");
-	    int instructionId = Integer.parseInt(req.getParameter("instructionId"));
+	    String instructionIdStr = req.getParameter("instructionId");
+	    int instructionId = Integer.parseInt(instructionIdStr);
 
 	    //セッションからログイン情報を取得
 	    HttpSession session = req.getSession(true);

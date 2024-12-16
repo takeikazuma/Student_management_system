@@ -110,31 +110,33 @@
 			    </div>
 			</div>
 
+			<!-- ボタン使用不可/可の切り替えのためのdiv -->
+			<div id=instructionFormArea">
+				<form action="InstructionHandler.action" method="post" id="instructionForm">
+				    <!-- 入力エリア -->
+				    <label for="for_inputdate" class="form-label">入力日</label>
+				    <input class="form-control" id = "inputDate" name="inputDate" type="text" value="${inputDate}" placeholder="YYYY/MM/DD" required />
+				    <label for="for_instruction" class="form-label">指導内容</label>
+				    <textarea class="form-control" id="inputInstructions" name="inputInstructions" rows="3" required>${inputInstructions}</textarea>
 
-			<form action="InstructionHandler.action" method="post" id="instructionForm">
-			    <!-- 入力エリア -->
-			    <label for="for_inputdate" class="form-label">入力日</label>
-			    <input class="form-control" id = "inputDate" name="inputDate" type="text" value="${inputDate}" placeholder="YYYY/MM/DD" required />
-			    <label for="for_instruction" class="form-label">指導内容</label>
-			    <textarea class="form-control" id="inputInstructions" name="inputInstructions" rows="3" required>${inputInstructions}</textarea>
+				    <!-- hiddenエリア -->
+				    <input type="hidden" id="instructionId" name="instructionId" value="${instructionId}" />
+				    <input type="hidden" id="operation" name="operation" value="" />
+				    <input type="hidden" id="studentIdHidden" name="studentIdHidden" value="${studentIdHidden}" />
 
-			    <!-- hiddenエリア -->
-			    <input type="hidden" id="instructionId" name="instructionId" value="${instructionId}" />
-			    <input type="hidden" id="operation" name="operation" value="" />
-			    <input type="hidden" id="studentIdHidden" name="studentIdHidden" value="${studentIdHidden}" />
+					<!-- メッセージ表示エリア -->
+		            <div class="my-2 text-danger">${message}</div>
 
-				<!-- メッセージ表示エリア -->
-	            <div class="my-2 text-danger">${message}</div>
-
-			    <!-- ボタンエリア -->
-			    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-2">
-			        <button type="button" class="w-25 btn btn-primary" onclick="submitForm('delete')">行削除</button>
-			        <button type="button" class="w-25 btn btn-primary" onclick="submitForm('register')">登録</button>
-			        <button type="button" class="w-25 btn btn-primary" onclick="submitForm('update')">修正</button>
-			        <button type="button" class="w-25 btn btn-primary" onclick="submitForm('export')">一覧出力</button>
-			        <button type="button" class="w-25 btn btn-primary" onclick="window.close()">閉じる</button>
-			    </div>
-			</form>
+				    <!-- ボタンエリア -->
+				    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-2">
+				    	<button type="button" class="w-25 btn btn-primary" onclick="submitForm('register')">登録</button>
+				    	<button type="button" class="w-25 btn btn-primary" onclick="submitForm('update')">修正</button>
+				        <button type="button" class="w-25 btn btn-primary" onclick="submitForm('delete')">行削除</button>
+				        <button type="button" class="w-25 btn btn-primary" onclick="submitForm('export')">CSV出力</button>
+				        <button type="button" class="w-25 btn btn-primary" onclick="window.close()">閉じる</button>
+				    </div>
+				</form>
+			</div>
         </section>
     </c:param>
 </c:import>

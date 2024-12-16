@@ -36,7 +36,7 @@ public class DeleteInstructionAction extends Action {
 		//指導表テーブルから該当データを削除
 		if (!(instructionDao.deleteInstruction(instruction))){
 			//削除失敗時
-	        req.setAttribute("error", "指導表の削除処理に失敗しました。");
+	        req.setAttribute("message", "指導表の削除処理に失敗しました。");
 	        return;
 
 		}else{
@@ -57,7 +57,7 @@ public class DeleteInstructionAction extends Action {
 		}
 
 		//リクエストに学生番号、学生氏名をセット
-		req.setAttribute("studentId", studentIdStr);
+		req.setAttribute("student_id", studentIdStr);
 
 	}
 

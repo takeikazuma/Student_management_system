@@ -4,6 +4,9 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <div class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+	<c:if test="${users.isAuthenticated()}">
+		<button class="btn btn-primary menu-button" id="menu-toggle" style="margin-right: 20px">☰</button>
+	</c:if>
     <h1 class="fs-3">経理本科教務システム</h1>
 </div>
 

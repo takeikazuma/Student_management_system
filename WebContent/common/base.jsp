@@ -25,19 +25,8 @@ ${param.scripts}
 		</header>
 
 		<div class="row justify-content-center">
-			<c:choose>
-				<%-- ログイン済みの場合 --%>
-				<c:when test="${users.isAuthenticated()}">
-					<nav class="col-2" style="height:40rem;">
-						<c:import url="/common/navigation.jsp" />
-					</nav>
-					<main class="col-10 border-start"> ${param.content} </main>
-				</c:when>
-				<%-- 未ログインの場合 --%>
-				<c:otherwise>
-					<main class="col-10"> ${param.content} </main>
-				</c:otherwise>
-			</c:choose>
+			<c:import url="/common/navigation.jsp" />
+			<main class="col-10"> ${param.content} </main>
 		</div>
 		<footer class="py-2 my-4 bg-dark bg-opacity-10 border-top border-3 align-bottom">
 			<c:import url="/common/footer.jsp" />

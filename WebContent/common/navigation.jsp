@@ -43,10 +43,10 @@
 
     </style>
 
-	<button class="btn btn-primary menu-button" id="menu-toggle">☰</button>
-    <!-- 横向きの折り畳みメニュー -->
+	<!-- メニューボタンは header.jsp に配置 -->
     <div class="side-menu" id="side-menu">
         <ul>
+        	<!-- 横向きの折り畳みメニュー -->
             <li class="nav-item my-3"><a href="menu.jsp">メニュー</a></li>
             <li class="nav-item mb-3">◇ 出席管理 ◇</li>
             <li class="nav-item mx-3 mb-3"><a href="input_attend.jsp">・ 出欠席</a></li>

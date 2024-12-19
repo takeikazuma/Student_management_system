@@ -1,10 +1,10 @@
 package dao;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
@@ -172,7 +172,7 @@ public class StudentDao extends DAO {
 					student.setStudentName(rSet.getString("student_name"));
 					student.setStudentKana(rSet.getString("student_kana"));
 					student.setSchoolYear(rSet.getInt("school_year"));
-					Date withdrawalDate = rSet.getDate("withdrawal_date");
+					Timestamp withdrawalDate = rSet.getTimestamp("withdrawal_date");
 					if(withdrawalDate != null) {
 						student.setWithdrawalDate(withdrawalDate.toInstant().atZone(ZoneId.systemDefault()));
 					}

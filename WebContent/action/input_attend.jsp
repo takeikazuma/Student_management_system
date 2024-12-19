@@ -120,7 +120,7 @@
                     </div>
                 </div>
             </form>
-			<c:if test="${attendMap.size() > 0}">
+			<c:if test="${studentFieldsMap.size() > 0}">
 	            <form action="RegistrationAttend.action" method="post">
 	                <%-- 検索項目をhidden項目で保持 --%>
 		            <input id="admission_year" name="admission_year" type="hidden" value="${admission_year}" />
@@ -144,16 +144,16 @@
 							<td class="border">${studentFields.value.get("student_name")}</td>
 							<td class="border">
 								<c:choose>
-									<c:when test="${attendMap.get(studentFields.key).get(Integer.valueOf(day)) == null || attendMap.get(studentFields.key).get(Integer.valueOf(day)) >= 0}">
+									<c:when test="${studentFields.value.get(String.valueOf(day)) == null || studentFields.value.get(String.valueOf(day)) >= 0}">
 										<select name="${studentFields.key}_${String.format('%04d',Integer.valueOf(year))}${String.format('%02d',Integer.valueOf(month))}${String.format('%02d',Integer.valueOf(day))}">
-											<option value="0" <c:if test="${attendMap.get(studentFields.key).get(Integer.valueOf(day)) == 0}">selected</c:if>>出</option>
-											<option value="1" <c:if test="${attendMap.get(studentFields.key).get(Integer.valueOf(day)) == 1}">selected</c:if>>欠</option>
-											<option value="2" <c:if test="${attendMap.get(studentFields.key).get(Integer.valueOf(day)) == 2}">selected</c:if>>遅</option>
-											<option value="3" <c:if test="${attendMap.get(studentFields.key).get(Integer.valueOf(day)) == 3}">selected</c:if>>早</option>
+											<option value="0" <c:if test="${studentFields.value.get(String.valueOf(day)) == 0}">selected</c:if>>出</option>
+											<option value="1" <c:if test="${studentFields.value.get(String.valueOf(day)) == 1}">selected</c:if>>欠</option>
+											<option value="2" <c:if test="${studentFields.value.get(String.valueOf(day)) == 2}">selected</c:if>>遅</option>
+											<option value="3" <c:if test="${studentFields.value.get(String.valueOf(day)) == 3}">selected</c:if>>早</option>
 										</select>
 									</c:when>
-									<c:when test="${attendMap.get(studentFields.key).get(Integer.valueOf(day)) == -1}"><div>退学</div></c:when>
-									<c:when test="${attendMap.get(studentFields.key).get(Integer.valueOf(day)) == -2}"><div>休暇</div></c:when>
+									<c:when test="${studentFields.value.get(String.valueOf(day)) == -1}"><div>退学</div></c:when>
+									<c:when test="${studentFields.value.get(String.valueOf(day)) == -2}"><div>休暇</div></c:when>
 									<c:otherwise><%-- 何もしない --%></c:otherwise>
 								</c:choose>
 							</td>

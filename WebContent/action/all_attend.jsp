@@ -47,6 +47,11 @@
 
                     }
                 });
+
+                // resultメッセージ表示
+                setTimeout(function() {
+                    $(".result").slideUp(500); // 500ミリ秒かけて非表示
+                }, 4000);
             });
         </script>
     </c:param>
@@ -64,16 +69,19 @@
                 -moz-appearance: textfield;
             }
         </style>
-        <section class="w-75 text-center m-auto border pb-3">
+        <section class="me-4">
             <form action="AllAttendRegist.action" method="post">
                 <div id="wrap_box">
-                  <h2 class="h3 mb-3 fw-norma bg-secondary bg-opacity-10 py-2">出欠席一覧表示</h2>
+                  <h2 class="h3 mb-3 fw-norma bg-secondary bg-opacity-10 py-2 px-4">出欠席一覧表示</h2>
                     <c:if test="${errors.size() > 0}">
-                        <div>
-                            <c:forEach var="error" items="${errors}">
-                                ${error}
-                            </c:forEach>
-                        </div>
+                        <c:forEach var="error" items="${errors}">
+	                        <div style="display:block; color:red;" class="error">${error}</div>
+                        </c:forEach>
+                    </c:if>
+                    <c:if test="${results.size() > 0}">
+                        <c:forEach var="result" items="${results}">
+    	                    <div class="result bg-success bg-opacity-50 text-center lh-lg">${result}</div>
+                        </c:forEach>
                     </c:if>
                     <div>
 						<table><tr>
@@ -108,32 +116,50 @@
                     </div>
                 </div>
             </form>
-        </section>
 
 	        <c:if test="${studentFieldsMap.size() > 0}">
 				<div>${year}年${month}月 出欠席一覧</div>
-				<table style="width:100%;text-align:center">
+				<table class="w-100" style="text-align:center">
 					<tr>
-						<td style="border: 1px solid black;">氏名</td>
+						<td class="border">氏名</td>
 						<c:forEach var="day" begin="1" end="${length_of_month}">
-							<td style="border: 1px solid black;">${day}</td>
+							<td class="border">${String.format('%02d',day)}</td>
 			            </c:forEach>
-			            <td style="border: 1px solid black;">合計</td>
+			            <td class="border">合計</td>
 					</tr>
 					<%-- 抽出学生を繰り返し --%>
 					<c:forEach var="studentFields" items="${studentFieldsMap}">
 						<tr>
-							<td style="border: 1px solid black;">${studentFields.value.get("student_name")}</td>
+							<td class="border">${studentFields.value.get("student_name")}</td>
 							<%-- 指定月の全ての日を繰り返し --%>
 							<c:forEach var="day" begin="1" end="${length_of_month}">
-								<td style="border: 1px solid black;">${(attendMap.get(studentFields.key).get(day)==1)?"欠":(attendMap.get(studentFields.key).get(day)==2)?"遅":(attendMap.get(studentFields.key).get(day)==3)?"早":""}</td>
+								<td class="border">
+									<c:choose>
+										<c:when test="${attendMap.get(studentFields.key).get(day) == -2}">休</c:when>
+										<c:when test="${attendMap.get(studentFields.key).get(day) == -1}">退</c:when>
+										<c:when test="${attendMap.get(studentFields.key).get(day) ==  1}">欠</c:when>
+										<c:when test="${attendMap.get(studentFields.key).get(day) ==  2}">遅</c:when>
+										<c:when test="${attendMap.get(studentFields.key).get(day) ==  3}">早</c:when>
+										<c:otherwise><%-- 出席 --%></c:otherwise>
+									</c:choose>
+								</td>
 							</c:forEach>
-							<td style="border: 1px solid black;">${studentAttendSumMap.get(studentFields.key)}</td>
+							<td class="border">${studentAttendSumMap.get(studentFields.key)}</td>
 		                </tr>
 					</c:forEach>
 
 	            </table>
+	            <div class="mt-4">
+		            <form action="AllAttendOutput.action" method="post">
+		            	<input type="hidden" name="admission_year" value="${admission_year}" />
+		            	<input type="hidden" name="class_name" value="${class_name}" />
+		            	<input type="hidden" name="year" value="${year}" />
+		            	<input type="hidden" name="month" value="${month}" />
+		            	<div><input class="btn btn-lg btn-primary" type="submit" value="出力" /></div>
+		            </form>
+	            </div>
 	        </c:if>
+        </section>
 
     </c:param>
 </c:import>

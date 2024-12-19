@@ -57,4 +57,54 @@ public class GradeClassDao extends DAO {
 		}
 		return classMap;
 	}
+
+	/**
+	 * クラス名からクラスIDを取得
+	 * @param className クラス名
+	 * @return クラスID
+	 * @throws Exception
+	 */
+	public Integer getClassId(String className) throws Exception {
+		Integer classId = null;
+
+		// データベースへのコネクションを確立
+		Connection connection = getConnection();
+		// プリペアードステートメント
+		PreparedStatement statement = null;
+
+		try {
+			// プリペアードステートメントにSQL文をセット
+			statement = connection.prepareStatement("select GRADE_CLASS_ID from GRADE_CLASS where GRADE_CLASS_NAME = ?");
+			statement.setString(1, className);
+
+			// プリペアードステートメントを実行
+			ResultSet rSet = statement.executeQuery();
+
+			// リザルトセットを取得
+			if(rSet.next()) {
+				classId = rSet.getInt("GRADE_CLASS_ID");
+			}
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			// プリペアードステートメントを閉じる
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException sqle) {
+					throw sqle;
+				}
+			}
+			// コネクションを閉じる
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException sqle) {
+					throw sqle;
+				}
+			}
+		}
+		return classId;
+	}
+
 }

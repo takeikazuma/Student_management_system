@@ -1,0 +1,37 @@
+/* Chrome, Safari, Edge  CSSでスピンボタンを非表示にする */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+/* 入力フィールド内のテキストを中央揃え */
+.month-input {
+    text-align: center; /* 得点を中央に配置 */
+    width: 40px; /* 幅を40pxに設定 */
+    display: block; /* インライン要素をブロック要素に変換 */
+}
+
+/* プレースホルダーのテキストも中央に配置 */
+.month-input::placeholder {
+    text-align: center; /* プレースホルダーも中央に配置 */
+}
+.form-control {
+    width: 40px; /* 幅を40pxに設定 */
+}
+
+/* 入力フィールド内のテキストを中央揃え */
+.score-input {
+    text-align: center; /* 得点を中央に配置 */
+    width: 40px; /* 幅を40pxに設定 */
+    display: block; /* インライン要素をブロック要素に変換 */
+}
+
+/* プレースホルダーのテキストを中央揃え */
+.score-input::placeholder {
+    text-align: center; /* プレースホルダーも中央に配置 */
+}

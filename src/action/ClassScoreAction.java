@@ -23,6 +23,8 @@ public class ClassScoreAction extends Action {
 		String class_id_str = "";
 		String subject_id_str = "";
 		String courseYear_str = "";
+		String subject_name ="";
+		String subject_code ="";
 		int class_id = 0;
 		int subject_id =0;
 		int courseYear =0;
@@ -32,11 +34,15 @@ public class ClassScoreAction extends Action {
 		List<Subject> subject_list = null;
 		ScoreDao scoreDao = new ScoreDao();
 		List<Score> score_list = null;
+		Subject subject = new Subject();
 
 //	//リクエストパラメータ―の取得 2
 		class_id_str = req.getParameter("class_id");// クラスID
 		subject_id_str = req.getParameter("subject_id");//科目ID
 		courseYear_str = req.getParameter("courseYear");//履修学年
+
+//		subject_name = req.getParameter("class_name");//クラス名
+//		subject_code = req.getParameter("subject_code");//科目コード
 
 		//クラスIDが送信されていた場合
 		if (class_id_str != null ) {
@@ -67,9 +73,26 @@ public class ClassScoreAction extends Action {
 
 
 //シーケンスNo.23：メソッドNo.5(クラス、科目に一致する成績情報の取得)
+
+		//DBからデータ取得 3
 		if (class_id  != 0 && subject_id != 0 && courseYear != 0) {
-			score_list = scoreDao.getScore(class_id,subject_id);
+			score_list = scoreDao.getScore(class_id,subject_id,courseYear);//成績データ取得
+			subject = subjectDao.getSubjectNameCode(subject_id);//科目名、科目コード取得
+		    subject_name = subject.getSubjectName();
+		    subject_code = subject.getSubjectCode();
 		}
+
+		// 各学生の月を一括更新用
+		String bulkMonthStr = req.getParameter("bulk_month");
+		if (bulkMonthStr != null && !bulkMonthStr.isEmpty()) {
+		    int bulkMonth = Integer.parseInt(bulkMonthStr);
+
+		    // 各学生の月を一括で更新
+		    for (Score score : score_list) {
+		        score.setScoreMonth(bulkMonth); // 一括で設定された月を適用
+		    }
+		}
+
 
 //レスポンス値をセット6
 		// リクエストにクラス一覧をセット
@@ -82,6 +105,8 @@ public class ClassScoreAction extends Action {
 		req.setAttribute("class_id", class_id);
 		req.setAttribute("subject_id",subject_id);
 		req.setAttribute("courseYear", courseYear);
+		req.setAttribute("subject_name", subject_name);
+		req.setAttribute("subject_code", subject_code);
 
 	//フォワード
 		url = "classScore.jsp";

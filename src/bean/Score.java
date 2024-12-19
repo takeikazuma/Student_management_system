@@ -15,6 +15,17 @@ public class Score implements Serializable{
 	private Student student;//落合追加
 	private Subject subject;//落合追加
 
+	  @Override
+	    public String toString() {
+	        return "Score{" +
+	               "studentId=" + studentId +
+	               ", subjectCode='" + subjectCode + '\'' +
+	               ", subjectId=" + (subject != null ? subject.getSubjectId() : "null") +
+	               ", scoreMonth=" + scoreMonth +
+	               ", scoreValue=" + scoreValue +
+	               '}';
+	    }
+
 	public int getScoreId() {
 		return scoreId;
 	}

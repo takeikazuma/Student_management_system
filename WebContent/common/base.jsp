@@ -26,7 +26,7 @@ ${param.scripts}
 
 		<div class="row justify-content-center">
 			<c:import url="/common/navigation.jsp" />
-			<main class="px-3"> ${param.content} </main>
+			<main class="px-2"> ${param.content} </main>
 		</div>
 		<footer class="py-2 my-3 bg-dark bg-opacity-10 border-top border-3 align-bottom">
 			<c:import url="/common/footer.jsp" />

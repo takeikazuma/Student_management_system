@@ -197,7 +197,6 @@
 					    </div>
 					</div>
 
-
 				    <!-- hiddenエリア -->
 				    <input type="hidden" id="instructionId" name="instructionId" value="${instructionId}" />
 				    <input type="hidden" id="operation" name="operation" value="" />

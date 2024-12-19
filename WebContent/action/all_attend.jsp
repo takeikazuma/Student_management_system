@@ -135,16 +135,16 @@
 							<c:forEach var="day" begin="1" end="${length_of_month}">
 								<td class="border">
 									<c:choose>
-										<c:when test="${attendMap.get(studentFields.key).get(day) == -2}">休</c:when>
-										<c:when test="${attendMap.get(studentFields.key).get(day) == -1}">退</c:when>
-										<c:when test="${attendMap.get(studentFields.key).get(day) ==  1}">欠</c:when>
-										<c:when test="${attendMap.get(studentFields.key).get(day) ==  2}">遅</c:when>
-										<c:when test="${attendMap.get(studentFields.key).get(day) ==  3}">早</c:when>
+										<c:when test="${studentFields.value.get(String.valueOf(day))==-2}">休</c:when>
+										<c:when test="${studentFields.value.get(String.valueOf(day))==-1}">退</c:when>
+										<c:when test="${studentFields.value.get(String.valueOf(day))== 1}">欠</c:when>
+										<c:when test="${studentFields.value.get(String.valueOf(day))== 2}">遅</c:when>
+										<c:when test="${studentFields.value.get(String.valueOf(day))== 3}">早</c:when>
 										<c:otherwise><%-- 出席 --%></c:otherwise>
 									</c:choose>
 								</td>
 							</c:forEach>
-							<td class="border">${studentAttendSumMap.get(studentFields.key)}</td>
+							<td class="border">${studentFields.value.get("attend_sum")}</td>
 		                </tr>
 					</c:forEach>
 

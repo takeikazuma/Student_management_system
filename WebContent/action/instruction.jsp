@@ -77,7 +77,6 @@
                             alert("無効な日付が入力されています。正しい日付を入力してください。");
                             return false;
                         }
-
                     }
 
                     //削除の場合は行選択がされているか(hiddenのinstructionIdに値が入っているか)チェック
@@ -97,21 +96,15 @@
                     		return false;
                     	}
                     }
-
 					//サブミット
                     document.getElementById("instructionForm").submit();
                 };
-
-
-
             });
         </script>
     </c:param>
     <c:param name="content">
         <section class="container mt-2">
-
         	<h2 class="h3 mb-3 fw-norma bg-secondary bg-opacity-10 py-2 px-4">学生指導表入力</h2>
-
             <!-- 学生検索エリア -->
 			<div class="search-section mb-2">
 			    <div class="form-row">
@@ -170,23 +163,40 @@
 			        </table>
 			    </div>
 			</div>
+			<div class="py-1"></div>
 
 			<!-- ボタン使用不可/可の切り替えのためのdiv -->
 			<div id=instructionFormArea" class="py-2">
 				<form action="InstructionHandler.action" method="post" id="instructionForm">
 				    <!-- 入力エリア -->
-					<div class="mb-3 row">
-						<label for="inputDate" class="col-sm-2 col-form-label">入力日</label>
-						<div class="col-sm-10">
-							<input class="form-control" id = "inputDate" name="inputDate" type="text" value="${inputDate}" placeholder="YYYY-MM-DD" required />
-						</div>
+<!-- 					<div class="mb-3 row"> -->
+<!-- 						<label for="inputDate" class="col-sm-1 col-form-label">入力日</label> -->
+<!-- 						<div class="col-sm-2"> -->
+<%-- 							<input class="form-control" id = "inputDate" name="inputDate" type="date" value="${inputDate}" required /> --%>
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 					<div class="mb-3 row"> -->
+<!-- 						<label for="inputInstructions" class="col-sm-1 col-form-label">指導内容</label> -->
+<!-- 						<div class="col-sm-11"> -->
+<%-- 							<textarea class="form-control" id="inputInstructions" name="inputInstructions" rows="3" required>${inputInstructions}</textarea> --%>
+<!-- 						</div> -->
+<!-- 					</div> -->
+
+					<!-- 入力エリア -->
+					<div class="mb-2 d-flex align-items-start">
+					    <!-- 入力日 -->
+					    <div class="me-4">
+					        <label for="inputDate" class="form-label">入力日</label>
+					        <input class="form-control" id="inputDate" name="inputDate" type="date" value="${inputDate}" style="width: 200px;" required />
+					    </div>
+
+					    <!-- 指導内容 -->
+					    <div style="flex: 1;">
+					        <label for="inputInstructions" class="form-label">指導内容</label>
+					        <textarea class="form-control" id="inputInstructions" name="inputInstructions" rows="2" required>${inputInstructions}</textarea>
+					    </div>
 					</div>
-					<div class="mb-3 row">
-						<label for="inputInstructions" class="col-sm-2 col-form-label">指導内容</label>
-						<div class="col-sm-10">
-							<textarea class="form-control" id="inputInstructions" name="inputInstructions" rows="3" required>${inputInstructions}</textarea>
-						</div>
-					</div>
+
 
 				    <!-- hiddenエリア -->
 				    <input type="hidden" id="instructionId" name="instructionId" value="${instructionId}" />
@@ -197,7 +207,7 @@
 		            <div class="my-2 text-danger" id="message">${message}</div>
 
 				    <!-- ボタンエリア -->
-				    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-2">
+				    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-3">
 				    	<button type="button" class="w-25 btn btn-primary" onclick="submitForm('register')">登録</button>
 				    	<button type="button" class="w-25 btn btn-primary" onclick="submitForm('update')">修正</button>
 				        <button type="button" class="w-25 btn btn-primary" onclick="submitForm('delete')">行削除</button>

@@ -57,3 +57,4 @@ public class AbsenceAction extends HttpServlet {
         dispatcher.forward(request, response);
     }
 }
+

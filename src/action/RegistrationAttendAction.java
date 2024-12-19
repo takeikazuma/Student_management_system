@@ -22,7 +22,7 @@ public class RegistrationAttendAction extends Action {
 
         // パラメーターをループで処理
         while (parameterNames.hasMoreElements()) {
-            // パラメーターの値をスプリットして分割
+            // パラメーターの値"nnnnnnn_yyyymmdd"をスプリットして分割
             String part = parameterNames.nextElement();
             String[] parts = part.split("_");
             if(parts.length == 2 && parts[1].length() == 8 && parts[1].matches("\\d+")) {

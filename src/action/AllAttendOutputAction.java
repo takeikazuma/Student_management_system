@@ -1,5 +1,8 @@
 package action;
 
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.URLEncoder;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -9,6 +12,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,15 +26,13 @@ import dao.GradeClassDao;
 import dao.StudentDao;
 import tool.Action;
 
-public class AllAttendRegistAction extends Action {
+public class AllAttendOutputAction extends Action {
 
 	@Override
 	public void execute(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		//ローカル変数の宣言 1
-		List<String> results = new ArrayList<>();
 		List<String> errors = new ArrayList<>();
 
-		String url = "";
 		int admissionYear = 0;
 		int year = 0;
 		int month = 0;
@@ -158,28 +160,76 @@ public class AllAttendRegistAction extends Action {
 						studentAttendSumMap.put(attends.getKey(), attendSum);
 					}
 				}
-
-				// 学生別欠席数をセット
-				req.setAttribute("studentAttendSumMap", studentAttendSumMap);
-
-				req.setAttribute("length_of_month", YearMonth.of(year, month).lengthOfMonth());
 			}
 			else {
 				errors.add("年月が正しくありません");
 			}
+
+			/** (暫定的に) CSV出力 **/
+	       // レスポンスの設定（Shift-JIS指定）
+	        res.setContentType("text/csv; charset=Shift_JIS");
+	        res.setHeader("Content-Disposition", "attachment; filename=\"" + URLEncoder.encode("attend_list.csv", "Shift_JIS") + "\"");
+
+	        // Shift-JIS対応のOutputStreamWriterを使用
+	        OutputStreamWriter writer = new OutputStreamWriter(res.getOutputStream(), "Shift_JIS");
+	        PrintWriter out = new PrintWriter(writer);
+
+			if(errors.size() <= 0) {
+				/** 正常処理 **/
+	        	int lengthOfMonth = YearMonth.of(year, month).lengthOfMonth();
+	        	List<String> csvLine = new ArrayList<>();
+	        	// 項目名
+	        	csvLine.add("氏名");
+			    for(int day = 1; day <= lengthOfMonth; day++) {
+		    		csvLine.add(String.valueOf(day));
+			    }
+			    csvLine.add("合計");
+			    out.println(String.join(",", csvLine));
+
+		        for(Entry<Integer, HashMap<String, String>> studentFields: studentFieldsMap.entrySet()) {
+		        	csvLine.clear();
+		        	csvLine.add(studentFields.getValue().get("student_name"));
+				    for(int day = 1; day <= lengthOfMonth; day++) {
+				    	int attendData = 0;
+				    	try {
+					    	attendData = attendMap.get(studentFields.getKey()).get(day);
+				    	} catch(Exception e) {
+				    		attendData = 0;
+				    	}
+				    	switch(attendData) {
+				    	case -2:
+				    		csvLine.add("休");
+				    		break;
+				    	case -1:
+				    		csvLine.add("退");
+				    		break;
+				    	case 1:
+				    		csvLine.add("欠");
+				    		break;
+				    	case 2:
+				    		csvLine.add("遅");
+				    		break;
+				    	case 3:
+				    		csvLine.add("早");
+				    		break;
+			    		default:
+			    			csvLine.add("");
+				    	}
+				    }
+				    csvLine.add(String.valueOf(studentAttendSumMap.get(studentFields.getKey())));
+				    out.println(String.join(",", csvLine));
+		        }
+			}
+			else {
+				/** エラー処理 **/
+		        // エラーメッセージをCSVに出力
+		        for(String errorMessage: errors) {
+				    out.println(errorMessage);
+		        }
+			}
+		    // PrintWriterのクローズ
+		    out.flush();
+		    out.close();
 		}
-
-		// 入力された項目をセット
-		req.setAttribute("admission_year", req.getParameter("admission_year"));
-		req.setAttribute("class_name", req.getParameter("class_name"));
-		req.setAttribute("year", req.getParameter("year"));
-		req.setAttribute("month", req.getParameter("month"));
-
-		req.setAttribute("errors", errors);
-		req.setAttribute("results", results);
-
-		//フォワード
-		url = "all_attend.jsp";
-		req.getRequestDispatcher(url).forward(req, res);
 	}
 }

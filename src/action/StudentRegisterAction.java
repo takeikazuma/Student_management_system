@@ -13,7 +13,7 @@ import dao.SubjectDao;
 import tool.Action;
 
 
-public class ClassScoreRegisterAction extends Action {
+public class StudentRegisterAction extends Action {
 
 	@Override
 	public void execute(HttpServletRequest req, HttpServletResponse res) throws Exception {

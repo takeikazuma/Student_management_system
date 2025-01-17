@@ -93,6 +93,88 @@ public class ScoreDao extends DAO {
 	}
 
 	/**
+	 * 学生番号に一致する成績情報の取得
+	 *
+	 * @param student_id:int,
+	 *            学生番号
+	 * @return 成功:対象学生に成績データ, 認証失敗:
+	 * @throws Exception
+	 */
+	public List<Score> getScore(int student_id) throws Exception {
+		// Usersインスタンスを初期化
+		List<Score> list =  new ArrayList<>();
+		// コネクションを確立
+		Connection connection = getConnection();
+		// プリペアードステートメント
+		PreparedStatement statement = null;
+
+		try {
+			// プリペアードステートメントにSQL文をセット
+			statement = connection.prepareStatement("SELECT * FROM subject AS su "
+													+ "LEFT JOIN score AS sc ON su.subject_id = sc.subject_id AND sc.student_id = ? "
+													+ "LEFT JOIN student AS st ON sc.student_id = st.student_id;");
+			// プリペアードステートメントに教員IDをバインド
+			statement.setInt(1, student_id);
+			// プリペアードステートメントを実行
+			ResultSet rSet = statement.executeQuery();
+
+			  // リザルトセットを全件走査
+	        while (rSet.next()) {
+	            // 新しいGradeClassインスタンスを生成し、検索結果をセット
+	        	Score scores = new Score();
+	        	Student student = new Student();
+	        	Subject subject = new Subject();
+	        	scores.setScoreId(rSet.getInt("SCORE_ID"));//成績ID
+	        	scores.setStudentId(rSet.getInt("STUDENT_ID"));//学生番号
+	        	scores.setSubjectCode(rSet.getString("SUBJECT_CODE"));//科目コード
+	        	scores.setScoreMonth(rSet.getInt("SCORE_MONTH"));//成績月
+	        	scores.setScoreValue(rSet.getInt("SCORE_VALUE"));//成績点数
+	        	// 学生名をセット
+	        	student.setStudentName(rSet.getString("STUDENT_NAME"));//学生名
+	        	scores.setStudent(student);
+	        	// 科目目をセット
+	        	subject.setSubjectName(rSet.getString("SUBJECT_NAME"));//科目名
+	        	subject.setSubjectId(rSet.getInt("SUBJECT_ID"));//科目ID
+	        	scores.setSubject(subject);
+
+	        	//データ確認用
+//	        	System.out.println(rSet.getInt("SCORE_ID"));
+//	        	System.out.println(rSet.getInt("STUDENT_ID"));
+//	        	System.out.println(rSet.getString("SUBJECT_CODE"));
+//	        	System.out.println(rSet.getInt("SCORE_MONTH"));
+//	        	System.out.println(rSet.getInt("SCORE_VALUE"));
+//	        	System.out.println(rSet.getString("STUDENT_NAME"));
+//	        	System.out.println(rSet.getString("SUBJECT_NAME"));
+//	        	System.out.println(rSet.getInt("SUBJECT_ID"));
+//	        	System.out.println();
+
+	            // リストに追加
+	            list.add(scores);
+	        }
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			// プリペアードステートメントを閉じる
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException sqle) {
+					throw sqle;
+				}
+			}
+			// コネクションを閉じる
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException sqle) {
+					throw sqle;
+				}
+			}
+		}
+		return list;
+	}
+
+	/**
 	 * 1件の成績を更新
 	 *
 	 * @param student_id:String
@@ -158,7 +240,6 @@ public class ScoreDao extends DAO {
 					}
 					// プリペアードステートメントを実行
 					count = statement.executeUpdate();
-					System.out.println(count);
 					} catch (Exception e) {
 						throw e;
 					} finally {

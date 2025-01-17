@@ -17,7 +17,7 @@
 				</div>
 				<div class="col d-flex align-items-center justify-content-center mx-2 rounded shadow"
 					style="height: 10rem; background-color: #bbd;">
-					<a href="#">学生番号指定</a>
+					<a href="StudentScore.action">学生番号指定</a>
 				</div>
 			</div>
 		</section>

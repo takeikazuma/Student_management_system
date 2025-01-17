@@ -32,38 +32,27 @@
 	</c:param>
 
 	<c:param name="content">
+	  <style>
+            /* 数値の上下ボタンを非表示にするCSS */
+            .no-spinner::-webkit-outer-spin-button,
+            .no-spinner::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+
+            .no-spinner {
+                -moz-appearance: textfield;
+            }
+        </style>
 		<section class="me-4">
 			<h2 class="h3 mb-3 fw-norma bg-secondary bg-opacity-10 py-2 px-4">成績入力</h2>
-			<form method="post" action="ClassScore.action">
+			<form method="post" action="StudentScore.action">
 				<div class="row border mx-3 mb-3 py-2 align-items-center rounded" id="filter">
-					<div class="col-2">
-						<label class="form-label" for="student-f1-select">履修学年 </label>
-						<select class="form-select " id="student-f1-select" name="courseYear">
-							<option value="0">--------</option>
-							<option value="1" <c:if test="${courseYear==1}">selected</c:if>>1年生</option>
-							<option value="2" <c:if test="${courseYear==2}">selected</c:if>>2年生</option>
-							<option value="3" <c:if test="${courseYear==3}">selected</c:if>>3年生</option>
-						</select>
-					</div>
 					<div class="col-4">
-						<label class="form-label" for="student-f2-select">クラス</label>
-						<select class="form-select " id="student-f2-select" name="class_id">
-							<option value="0">--------</option>
-							<c:forEach var="list" items="${class_list}">
-								<%-- 現在のnumと選択されていたf2が一致していた場合selectedを追記 --%>
-								<option value="${list.gradeClassId}" <c:if test="${list.gradeClassId==class_id}">selected</c:if>>${list.gradeClassName}</option>
-							</c:forEach>
-						</select>
-					</div>
-					<div class="col-4">
-						<label class="form-label" for="student-f2-select">科目名</label>
-						<select class="form-select " id="student-f2-select" name="subject_id">
-							<option value="0">--------</option>
-							<c:forEach var="subject" items="${subject_list}">
-								<%-- 現在のnumと選択されていたf2が一致していた場合selectedを追記 --%>
-								<option value="${subject.subjectId}" <c:if test="${subject.subjectId==subject_id}">selected</c:if>>${subject.subjectName}</option>
-							</c:forEach>
-						</select>
+						<label class="form-label" for="student-f2-select">学生番号</label>
+						  <input class="form-control px-5 fs-5 no-spinner" autocomplete="off"
+                                   id="id-input" maxlength="9" name="id" placeholder="最大10桁の整数を入力してください"
+                                   style="ime-mode: disabled" type="number" value="${id}" required />
 					</div>
 					<div class="col-2 text-center">
 						<button class="btn btn-secondary" id="filter-button">絞込み</button>
@@ -72,22 +61,7 @@
 			</form>
 			<c:choose>
 		    <c:when test="${score_list.size()>0}">
-		        <form method="post" action="ClassScore.action">
-		            <!-- 一括月入力 -->
-		            <div class="row border mx-3 mb-3 py-2 align-items-center rounded" id="bulk-month-input" style="width: 302.66666px;">
-		                <div class="col-8" style="width: 124px;">
-		                    <label class="form-label" for="bulk-month-input-field">一括月入力</label>
-		                    <input type="number" name="bulk_month" min="0" max="12" class="form-control" />
-		                </div>
-		                <div class="col-4 text-center" style="width: 124px;">
-		                    <button class="btn btn-primary mt-4" id="apply-bulk-month">適用</button>
-		                </div>
-		            </div>
-		            <input type="hidden" name="courseYear" value="${courseYear}" />
-		            <input type="hidden" name="class_id" value="${class_id}" />
-		            <input type="hidden" name="subject_id" value="${subject_id}" />
-		       </form>
-		       <form method="post" id="test-form" action="ClassScoreRegister.action">
+		       <form method="post" id="test-form" action="StudentRegister.action">
 		            <table class="table table-hover">
 		                <tr>
 		                    <th>学生番号</th>
@@ -113,8 +87,8 @@
 			                        </c:choose> />
 		                        </td>
 		                        <td>${score.student.studentName}</td>
-		                        <td>${subject_name}</td>
-		                        <td>${subject_code}</td>
+		                        <td>${score.subject.subjectName}</td>
+		                        <td>${score.subjectCode}</td>
 		                        <td>
 		                            <!-- 得点入力フィールド -->
 		                            <input type="number" name="value_${score.studentId}" min="0" max="100" placeholder="得点" class="score-input"

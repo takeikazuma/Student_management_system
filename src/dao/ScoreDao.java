@@ -55,7 +55,7 @@ public class ScoreDao extends DAO {
 	        	Subject subject = new Subject();
 	        	scores.setScoreId(rSet.getInt("SCORE_ID"));//成績ID
 	        	scores.setStudentId(rSet.getInt("STUDENT_ID"));//学生番号
-	        	scores.setSubjectCode(rSet.getString("SUBJECT_CODE"));//科目コード
+	        	scores.setSubjectId(rSet.getInt("SUBJECT_ID"));//科目コード
 	        	scores.setScoreMonth(rSet.getInt("SCORE_MONTH"));//成績月
 	        	scores.setScoreValue(rSet.getInt("SCORE_VALUE"));//成績点数
 	        	// 学生名をセット
@@ -63,7 +63,7 @@ public class ScoreDao extends DAO {
 	        	scores.setStudent(student);
 	        	// 科目目をセット
 	        	subject.setSubjectName(rSet.getString("SUBJECT_NAME"));//科目名
-	        	subject.setSubjectId(rSet.getInt("SUBJECT_ID"));//科目ID
+	        	subject.setSubjectCode(rSet.getString("SUBJECT_CODE"));//科目コード
 	        	scores.setSubject(subject);
 
 	            // リストに追加
@@ -112,7 +112,7 @@ public class ScoreDao extends DAO {
 			// プリペアードステートメントにSQL文をセット
 			statement = connection.prepareStatement("SELECT * FROM subject AS su "
 													+ "LEFT JOIN score AS sc ON su.subject_id = sc.subject_id AND sc.student_id = ? "
-													+ "LEFT JOIN student AS st ON sc.student_id = st.student_id;");
+													+ "LEFT JOIN student AS st ON sc.student_id = st.student_id ORDER BY su.subject_id;");
 			// プリペアードステートメントに教員IDをバインド
 			statement.setInt(1, student_id);
 			// プリペアードステートメントを実行
@@ -126,15 +126,15 @@ public class ScoreDao extends DAO {
 	        	Subject subject = new Subject();
 	        	scores.setScoreId(rSet.getInt("SCORE_ID"));//成績ID
 	        	scores.setStudentId(rSet.getInt("STUDENT_ID"));//学生番号
-	        	scores.setSubjectCode(rSet.getString("SUBJECT_CODE"));//科目コード
+	        	scores.setSubjectId(rSet.getInt("SUBJECT_ID"));//科目ID
 	        	scores.setScoreMonth(rSet.getInt("SCORE_MONTH"));//成績月
 	        	scores.setScoreValue(rSet.getInt("SCORE_VALUE"));//成績点数
 	        	// 学生名をセット
 	        	student.setStudentName(rSet.getString("STUDENT_NAME"));//学生名
 	        	scores.setStudent(student);
-	        	// 科目目をセット
+	        	// 科目名をセット
 	        	subject.setSubjectName(rSet.getString("SUBJECT_NAME"));//科目名
-	        	subject.setSubjectId(rSet.getInt("SUBJECT_ID"));//科目ID
+	        	subject.setSubjectCode(rSet.getString("SUBJECT_CODE"));//科目ID
 	        	scores.setSubject(subject);
 
 	        	//データ確認用
@@ -210,7 +210,7 @@ public class ScoreDao extends DAO {
 				try {
 					// データベースから成績を取得
 //					System.out.println(score);
-					Score old = getScoreId(score.getStudentId(),score.getSubject().getSubjectId());
+					Score old = getScoreId(score.getStudentId(),score.getSubjectId());
 //					System.out.println(old);
 					if (old == null) {
 						// 成績が存在しなかった場合
@@ -218,7 +218,113 @@ public class ScoreDao extends DAO {
 						statement = connection.prepareStatement(
 								"INSERT INTO score(student_id,subject_id,score_month,score_value,reg_date,update_date) values(?,?,?,?,?,?)");
 						statement.setInt(1, score.getStudentId());
-						statement.setInt(2, score.getSubject().getSubjectId());
+						statement.setInt(2, score.getSubjectId());
+						statement.setInt(3, score.getScoreMonth());
+						statement.setInt(4, score.getScoreValue());
+						statement.setTimestamp(5, currentTimestamp); // reg_date
+					    statement.setTimestamp(6, currentTimestamp); // update_date
+//					    System.out.println(score.getStudentId());
+//					    System.out.println(score.getSubject().getSubjectId());
+//					    System.out.println(score.getScoreMonth());
+//					    System.out.println(score.getScoreValue());
+//					    System.out.println(currentTimestamp);
+					} else {
+						// 成績が存在する場合
+						// プリペアードステートメントにUPDATE文をセット
+						statement = connection.prepareStatement(
+								"UPDATE score SET score_month=?,score_value=?,update_date=? where score_id=?");
+						statement.setInt(1, score.getScoreMonth());
+						statement.setInt(2, score.getScoreValue());
+						statement.setTimestamp(3,currentTimestamp);//update_date
+						statement.setInt(4,old.getScoreId());
+					}
+					// プリペアードステートメントを実行
+					count = statement.executeUpdate();
+					} catch (Exception e) {
+						throw e;
+					} finally {
+						if (statement != null) {
+							try {
+								statement.close();
+							} catch (SQLException sqle) {
+								throw sqle;
+							}
+						}
+					}
+
+					if (count > 0) {
+						canCommit = true;
+					} else {
+						// 失敗の場合
+						// ループを抜ける
+						canCommit = false;
+						break;
+					}
+			}
+				if (canCommit) {
+					// 全て正常終了の場合
+					// コミット
+					connection.commit();
+				} else {
+					throw new Exception();
+				}
+			} catch (SQLException sqle) {
+				// エラーが発生した場合
+				try {
+					// ロールバック
+					connection.rollback();
+				} catch (SQLException e) {
+					throw e;
+				}
+
+			} finally {
+				if (connection != null) {
+					try {
+						connection.setAutoCommit(true);
+						connection.close();
+					} catch (SQLException sqle) {
+						throw sqle;
+					}
+				}
+			}
+			return canCommit;
+		}
+	/**
+	 * 1件の成績を更新
+	 *
+	 * @param score_list:List<Score>
+	 *            成績リスト
+	 * @return 登録成功:true, 認証失敗:null
+	 * @throws Exception
+	 */
+	public boolean saveScore(List<Score> score_list) throws Exception {
+		// コネクションを確立
+		Connection connection = getConnection();
+		// コミット許可フラグ
+		boolean canCommit = true;
+		Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+		try {
+			// 自動コミットをオフ
+			connection.setAutoCommit(false);
+			// リストを全件走査
+			for (Score score : score_list) {
+				// 1件ずつ保存
+				PreparedStatement statement = null;
+				// 実行件数
+				int count = 0;
+
+				try {
+					// データベースから成績を取得
+					System.out.println(score);
+					Score old = getScoreId(score.getStudentId(),score.getSubjectId());
+//					System.out.println(old);
+					if (old == null) {
+						// 成績が存在しなかった場合
+						// プリペアードステートメントにINSERT文をセット
+						statement = connection.prepareStatement(
+								"INSERT INTO score(student_id,subject_id,score_month,score_value,reg_date,update_date) values(?,?,?,?,?,?)");
+						statement.setInt(1, score.getStudentId());
+						statement.setInt(2, score.getSubjectId());
 						statement.setInt(3, score.getScoreMonth());
 						statement.setInt(4, score.getScoreValue());
 						statement.setTimestamp(5, currentTimestamp); // reg_date

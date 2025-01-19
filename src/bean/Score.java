@@ -7,7 +7,7 @@ public class Score implements Serializable{
 
 	private int scoreId;
 	private int studentId;
-	private String subjectCode;
+	private int subjectId;
 	private int scoreMonth;
 	private int scoreValue;
 	private ZonedDateTime regDate;//	private datetime regDate;
@@ -19,7 +19,7 @@ public class Score implements Serializable{
 	    public String toString() {
 	        return "Score{" +
 	               "studentId=" + studentId +
-	               ", subjectCode='" + subjectCode + '\'' +
+	               ", subjectId='" + subjectId + '\'' +
 	               ", subjectId=" + (subject != null ? subject.getSubjectId() : "null") +
 	               ", scoreMonth=" + scoreMonth +
 	               ", scoreValue=" + scoreValue +
@@ -40,11 +40,11 @@ public class Score implements Serializable{
 		this.studentId = studentId;
 	}
 
-	public String getSubjectCode() {
-		return subjectCode;
+	public int getSubjectId() {
+		return subjectId;
 	}
-	public void setSubjectCode(String subjectCode) {
-		this.subjectCode = subjectCode;
+	public void setSubjectId(int subjectId) {
+		this.subjectId = subjectId;
 	}
 
 	public int getScoreMonth(){

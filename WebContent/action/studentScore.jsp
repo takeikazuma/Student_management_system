@@ -29,6 +29,25 @@
          	</c:when>
          </c:choose>
     </section>
+    <script type="text/javascript">
+            $(function() {
+                // カスタムバリデーションメッセージを設定
+                $('#id-input').on('invalid', function() {
+                    this.setCustomValidity('学生番号を入力してください。');
+                });
+                $('#id-input').on('input', function() {
+                    this.setCustomValidity('');
+                });
+
+                // 学生番号の桁数制限（7桁以内）
+                $('#id-input').on('input', function() {
+                    const maxDigits = 7;
+                    if ($(this).val().length > maxDigits) {
+                        $(this).val($(this).val().slice(0, maxDigits));
+                    }
+                });
+            });
+        </script>
 	</c:param>
 
 	<c:param name="content">
@@ -51,8 +70,8 @@
 					<div class="col-4">
 						<label class="form-label" for="student-f2-select">学生番号</label>
 						  <input class="form-control px-5 fs-5 no-spinner" autocomplete="off"
-                                   id="id-input" maxlength="9" name="id" placeholder="最大10桁の整数を入力してください"
-                                   style="ime-mode: disabled" type="number" value="${id}" required />
+                                   id="id-input" maxlength="8" name="studentid" placeholder="7桁の整数で入力してください"
+                                   style="ime-mode: disabled" type="number" value="" required />
 					</div>
 					<div class="col-2 text-center">
 						<button class="btn btn-secondary" id="filter-button">絞込み</button>
@@ -73,10 +92,10 @@
 		                </tr>
 		                <c:forEach var="score" items="${score_list}">
 		                    <tr>
-		                        <td>${score.studentId}</td>
+		                        <td>${score_list[0].getStudentId()}</td>
 		                        <td>
 		                            <!-- 個別月入力フィールド -->
-			                        <input type="number" name="month_${score.studentId}" min="0" max="12" placeholder="月" class="month-input"
+			                        <input type="number" name="month_${score.subjectId}" min="0" max="12" placeholder="月" class="month-input"
 			                        <c:choose>
 			                        	<c:when test="${input_months.containsKey(score.studentId)}">
 			                        		value="${input_months.get(score.studentId)}"
@@ -86,12 +105,12 @@
 			                        	</c:when>
 			                        </c:choose> />
 		                        </td>
-		                        <td>${score.student.studentName}</td>
+		                        <td>${score_list[0].getStudent().getStudentName()}</td>
 		                        <td>${score.subject.subjectName}</td>
-		                        <td>${score.subjectCode}</td>
+		                        <td>${score.subject.subjectCode}</td>
 		                        <td>
 		                            <!-- 得点入力フィールド -->
-		                            <input type="number" name="value_${score.studentId}" min="0" max="100" placeholder="得点" class="score-input"
+		                            <input type="number" name="value_${score.subjectId}" min="0" max="100" placeholder="得点" class="score-input"
 		                             <c:choose>
 		                             	<c:when test="${input_points.containsKey(score.studentId)}">
 		                             		value="${input_points.get(score.studentId)}"
@@ -101,21 +120,20 @@
 		                             	</c:when>
 		                             </c:choose> />
 		                            <div class="mt-2 text-warning">${errors.get(score.studentId)}</div>
-		                            <!-- 登録する学生番号を一覧として送る -->
-		                            <input type="hidden" name="score_studentId_set[]" value="${score.studentId}" />
+		                            <!-- 登録する成績IDを一覧として送る -->
+		                            <input type="hidden" name="scoreid_${score.subjectId}" value="${score.scoreId}" />
+		                             <!-- 登録する科目IDを一覧として送る -->
+		                            <input type="hidden" name="score_subjectId_set[]" value="${score.subjectId}" />
 		                        </td>
 		                    </tr>
 		                </c:forEach>
 		            </table>
-		             <input type="hidden" name="courseYear" value="${courseYear}" />
-		             <input type="hidden" name="class_id" value="${class_id}" />
-		             <input type="hidden" name="subject_id" value="${subject_id}" />
-		             <input type="hidden" name="subject_id_in" value="${subject_id}" />
+		            <input type="hidden" name="student_id" value="${score_list[0].getStudentId()}" />
 		            <input class="btn btn-secondary" type="submit" value="登録" name="end" />
 		        </form>
 		    </c:when>
-		    <c:when test="${score_list.size()==0}">
-		        <div>学生情報が存在しませんでした</div>
+		    <c:when test="${student_info.size()==0}">
+		        <div><h3>学生情報が存在しませんでした</h3></div>
 		    </c:when>
 			</c:choose>
 		</section>

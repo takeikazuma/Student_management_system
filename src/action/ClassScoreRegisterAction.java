@@ -85,10 +85,7 @@ public class ClassScoreRegisterAction extends Action {
 			score.setStudentId(studentid);
 			score.setScoreMonth(month);
 			score.setScoreValue(value);
-			Subject subject_a = new Subject();
-			subject_a.setSubjectId(subjectid);
-			score.setSubject(subject_a);
-			score.setSubjectCode(subject.getSubjectCode());
+			score.setSubjectId(subjectid);
 
 			score_list.add(score);
 		}

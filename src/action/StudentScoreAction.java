@@ -27,7 +27,7 @@ public class StudentScoreAction extends Action {
 		List<Student> student_info = null;
 
 //	//リクエストパラメータ―の取得 2
-		student_id_str = req.getParameter("studentid");// 学生番号
+		student_id_str = req.getParameter("student_id");// 学生番号
 
 		//学生番号が送信されていた場合
 		if (student_id_str != null ) {
@@ -58,8 +58,12 @@ public class StudentScoreAction extends Action {
 //レスポンス値をセット6
 		// リクエストに成績一覧をセット
 		req.setAttribute("score_list", score_list);
-		req.setAttribute("studentid", student_id);
 		req.setAttribute("student_info", student_info);
+		if (student_id == 0) {
+	        req.setAttribute("student_id", "");  // student_id を空の文字列に設定
+	    } else {
+	        req.setAttribute("student_id", student_id);  // 通常のstudent_idをセット
+	    }
 	//フォワード
 		url = "studentScore.jsp";
 		req.getRequestDispatcher(url).forward(req, res);

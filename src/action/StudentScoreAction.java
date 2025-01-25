@@ -51,7 +51,7 @@ public class StudentScoreAction extends Action {
 		if (student_id != 0 && (student_id >= 1_000_000 && student_id <= 9_999_999)) {
 			student_info = studentDao.getStudent(student_id);
 			if(student_info!=null){
-				score_list = scoreDao.getScore(student_id);//成績データ取得
+				score_list = scoreDao.getScore(student_id,"in");//成績データ取得
 			}
 		}
 

@@ -97,10 +97,12 @@ public class ScoreDao extends DAO {
 	 *
 	 * @param student_id:int,
 	 *            学生番号
-	 * @return 成功:対象学生に成績データ, 認証失敗:
+	 * @param sql_select:String,
+	 *            inまたはout 入力用か出力用か判断
+	 * @return 成功:対象学生に成績データ, 失敗:
 	 * @throws Exception
 	 */
-	public List<Score> getScore(int student_id) throws Exception {
+	public List<Score> getScore(int student_id,String sql_select) throws Exception {
 		// Usersインスタンスを初期化
 		List<Score> list =  new ArrayList<>();
 		// コネクションを確立
@@ -110,9 +112,22 @@ public class ScoreDao extends DAO {
 
 		try {
 			// プリペアードステートメントにSQL文をセット
-			statement = connection.prepareStatement("SELECT * FROM subject AS su "
-													+ "LEFT JOIN score AS sc ON su.subject_id = sc.subject_id AND sc.student_id = ? "
-													+ "LEFT JOIN student AS st ON sc.student_id = st.student_id ORDER BY su.subject_id;");
+
+			if(sql_select.equals("in")){
+//未入力成績科目も出す場合
+				statement = connection.prepareStatement("SELECT * FROM subject AS su "
+						+ "LEFT JOIN score AS sc ON su.subject_id = sc.subject_id AND sc.student_id = ? "
+						+ "LEFT JOIN student AS st ON sc.student_id = st.student_id ORDER BY su.subject_id;");
+				}else if(sql_select.equals("out")){
+//登録済みのみ成績科目を出す場合
+				statement = connection.prepareStatement("SELECT su.subject_id,su.subject_code,su.subject_name,su.course_year, "
+															+ "sc.score_id,sc.student_id,sc.score_month,sc.score_value, "
+															+ "st.admission_year,st.student_name,st.school_year,st.is_enrollment, "
+															+ "gc.grade_class_id,gc.grade_class_name "
+															+ "FROM subject AS su,score AS sc,student AS st,grade_class AS gc "
+															+ "WHERE su.subject_id = sc.subject_id AND sc.student_id = st.student_id "
+															+ "AND st.grade_class_id = gc.grade_class_id AND sc.student_id = ? "
+															+ "AND sc.score_month <> 0 ORDER BY su.course_year,su.subject_id;");}
 			// プリペアードステートメントに教員IDをバインド
 			statement.setInt(1, student_id);
 			// プリペアードステートメントを実行
@@ -124,17 +139,23 @@ public class ScoreDao extends DAO {
 	        	Score scores = new Score();
 	        	Student student = new Student();
 	        	Subject subject = new Subject();
-	        	scores.setScoreId(rSet.getInt("SCORE_ID"));//成績ID
+//	        	scores.setScoreId(rSet.getInt("SCORE_ID"));//成績ID
 	        	scores.setStudentId(rSet.getInt("STUDENT_ID"));//学生番号
-	        	scores.setSubjectId(rSet.getInt("SUBJECT_ID"));//科目ID
+//	        	scores.setSubjectId(rSet.getInt("SUBJECT_ID"));//科目ID
 	        	scores.setScoreMonth(rSet.getInt("SCORE_MONTH"));//成績月
 	        	scores.setScoreValue(rSet.getInt("SCORE_VALUE"));//成績点数
-	        	// 学生名をセット
+	        	// 学生情報をセット
 	        	student.setStudentName(rSet.getString("STUDENT_NAME"));//学生名
+	        	student.setAdmissionYear(rSet.getInt("ADMISSION_YEAR"));//入学年度
+	        	student.setSchoolYear(rSet.getInt("SCHOOL_YEAR"));//学年
+	        	student.setIsEnrollment(rSet.getBoolean("IS_ENROLLMENT"));//在学退学フラグ
+//	        	student.setGradeClassId(rSet.getInt("GRADE_CLASS_ID"));//クラスID
+	        	student.setGradeClassName(rSet.getString("GRADE_CLASS_NAME"));//クラス名
 	        	scores.setStudent(student);
-	        	// 科目名をセット
+	        	// 科目情報をセット
 	        	subject.setSubjectName(rSet.getString("SUBJECT_NAME"));//科目名
-	        	subject.setSubjectCode(rSet.getString("SUBJECT_CODE"));//科目ID
+	        	subject.setSubjectCode(rSet.getString("SUBJECT_CODE"));//科目コード
+	        	subject.setCourseYear(rSet.getInt("COURSE_YEAR"));//学年
 	        	scores.setSubject(subject);
 
 	        	//データ確認用
@@ -146,6 +167,7 @@ public class ScoreDao extends DAO {
 //	        	System.out.println(rSet.getString("STUDENT_NAME"));
 //	        	System.out.println(rSet.getString("SUBJECT_NAME"));
 //	        	System.out.println(rSet.getInt("SUBJECT_ID"));
+//	        	System.out.println(rSet.getInt("COURSE_YEAR"));
 //	        	System.out.println();
 
 	            // リストに追加

@@ -12,23 +12,6 @@
 	</c:param>
 
 	<c:param name="scripts">
-	<section class="me-4">
-        <!-- ここにフォームや内容を記載 -->
-
-        <!-- ダイアログ表示用スクリプト -->
-         <c:choose>
-         	<c:when test="${registercheck_flag == true}">
-         		 <script>
-                alert("登録が完了しました！");
-            	</script>
-         	</c:when>
-         	<c:when test="${registercheck_flag == false}">
-         		 <script>
-                alert("登録に失敗しました！");
-            	</script>
-         	</c:when>
-         </c:choose>
-    </section>
     <script type="text/javascript">
             $(function() {
                 //検索ボタン押下時学生検索画面を開く処理を追加
@@ -103,10 +86,11 @@
 				</div>
 			<c:choose>
 		    <c:when test="${score_list.size()>0}">
-		       <form method="post" id="test-form" action="StudentRegister.action">
+		       <form method="post" id="test-form" action="StudentOut.action">
 		            <table class="table table-hover">
 		                <tr>
 		                    <th>学生番号</th>
+		                    <th>学年</th>
 		                    <th>月</th>
 		                    <th>氏名</th>
 		                    <th>科目名</th>
@@ -116,6 +100,7 @@
 		                <c:forEach var="score" items="${score_list}">
 		                    <tr>
 		                        <td>${score_list[0].getStudentId()}</td>
+		                        <td>${score.subject.courseYear}</td>
 		                        <td>${score.scoreMonth}</td>
 		                        <td>${score_list[0].getStudent().getStudentName()}</td>
 		                        <td>${score.subject.subjectName}</td>
@@ -124,7 +109,8 @@
 		                    </tr>
 		                </c:forEach>
 		            </table>
-		            <input type="hidden" name="csv" value="${score_list}" />
+		            <input type="hidden" name="csv_student_id" value="${student_id}" />
+		            <input type="hidden" name="csv_date" value="${score_list}" />
 		            <input class="btn btn-secondary" type="submit" value="CSV出力" name="end" />
 		        </form>
 		    </c:when>

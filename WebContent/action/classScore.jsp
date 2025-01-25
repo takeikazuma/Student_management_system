@@ -37,12 +37,12 @@
 			<form method="post" action="ClassScore.action">
 				<div class="row border mx-3 mb-3 py-2 align-items-center rounded" id="filter">
 					<div class="col-2">
-						<label class="form-label" for="student-f1-select">履修学年 </label>
+						<label class="form-label" for="student-f1-select">入学年度 </label>
 						<select class="form-select " id="student-f1-select" name="courseYear">
 							<option value="0">--------</option>
-							<option value="1" <c:if test="${courseYear==1}">selected</c:if>>1年生</option>
-							<option value="2" <c:if test="${courseYear==2}">selected</c:if>>2年生</option>
-							<option value="3" <c:if test="${courseYear==3}">selected</c:if>>3年生</option>
+							<option value="2021" <c:if test="${courseYear==2021}">selected</c:if>>2021</option>
+							<option value="2022" <c:if test="${courseYear==2022}">selected</c:if>>2022</option>
+							<option value="2023" <c:if test="${courseYear==2023}">selected</c:if>>2023</option>
 						</select>
 					</div>
 					<div class="col-4">

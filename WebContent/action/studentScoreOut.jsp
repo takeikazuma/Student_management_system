@@ -57,11 +57,11 @@
 				                id="student_id"
 				                maxlength="7"
 				                name="student_id"
-				                placeholder="7桁の整数で入力してください"
+				                placeholder="7桁の半角数字で入力してください"
 				                style="ime-mode: disabled"
 				                type="text"
 				                pattern="\d{7}"
-				                title="7桁の整数を入力してください"
+				                title="7桁の半角数字で入力してください"
 				                value="${student_id}"
 				                required
 				            />

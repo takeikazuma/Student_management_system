@@ -18,14 +18,13 @@ public class SubjectScoreOutAction extends Action {
 
 	@Override
 	public void execute(HttpServletRequest req, HttpServletResponse res) throws Exception {
-//	//ローカル変数の宣言 1
+	//ローカル変数の宣言 1
 		String url = "";
 		String class_id_str = "";
 		String subject_id_str = "";
 		String courseYear_str = "";
 		String subject_name ="";
 		String subject_code ="";
-		String registercheck_str ="";
 		int class_id = 0;
 		int subject_id =0;
 		int courseYear =0;
@@ -37,13 +36,10 @@ public class SubjectScoreOutAction extends Action {
 		List<Score> score_list = null;
 		Subject subject = new Subject();
 
-//	//リクエストパラメータ―の取得 2
+	//リクエストパラメータ―の取得 2
 		class_id_str = req.getParameter("class_id");// クラスID
 		subject_id_str = req.getParameter("subject_id");//科目ID
-		courseYear_str = req.getParameter("courseYear");//履修学年
-
-//		subject_name = req.getParameter("class_name");//クラス名
-//		subject_code = req.getParameter("subject_code");//科目コード
+		courseYear_str = req.getParameter("courseYear");//入学年度
 
 		//クラスIDが送信されていた場合
 		if (class_id_str != null ) {
@@ -55,17 +51,10 @@ public class SubjectScoreOutAction extends Action {
 			// 数値に変換
 			subject_id = Integer.parseInt(subject_id_str);
 		}
-		//履修学年が送信されていた場合
+		//入学年度が送信されていた場合
 		if (courseYear_str != null) {
 			// 数値に変換
 			courseYear = Integer.parseInt(courseYear_str);
-		}
-		registercheck_str = req.getParameter("registercheck_flag");//成績登録後かチェック用
-		if (registercheck_str != null) {
-			// 変換
-			boolean registercheck = false;
-			registercheck = Boolean.parseBoolean(registercheck_str);
-			req.setAttribute("registercheck_flag",registercheck);
 		}
 //シーケンスNo.21：メソッドNo.3(プルダウンに表示するクラスの一覧を取得)
 
@@ -83,24 +72,11 @@ public class SubjectScoreOutAction extends Action {
 
 		//DBからデータ取得 3
 		if (class_id  != 0 && subject_id != 0 && courseYear != 0) {
-			score_list = scoreDao.getScore(class_id,subject_id,courseYear);//成績データ取得
+			score_list = scoreDao.getScore(class_id,subject_id,courseYear,"out");//成績データ取得
 			subject = subjectDao.getSubjectNameCode(subject_id);//科目名、科目コード取得
 		    subject_name = subject.getSubjectName();
 		    subject_code = subject.getSubjectCode();
 		}
-
-		// 各学生の月を一括更新用
-		String bulkMonthStr = req.getParameter("bulk_month");
-		if (bulkMonthStr != null && !bulkMonthStr.isEmpty()) {
-		    int bulkMonth = Integer.parseInt(bulkMonthStr);
-
-		    // 各学生の月を一括で更新
-		    for (Score score : score_list) {
-		        score.setScoreMonth(bulkMonth); // 一括で設定された月を適用
-		    }
-		}
-
-
 //レスポンス値をセット6
 		// リクエストにクラス一覧をセット
 		req.setAttribute("class_list", class_list);

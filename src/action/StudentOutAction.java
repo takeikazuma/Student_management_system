@@ -26,15 +26,11 @@ public class StudentOutAction extends Action {
     public void execute(HttpServletRequest req, HttpServletResponse res) throws Exception {
         String url = "studentScoreOut.jsp";
         String studentIdStr = req.getParameter("csv_student_id");
-        String registerCheckStr = req.getParameter("registercheck_flag");
 
         int studentId = 0;
         if (studentIdStr != null) {
             studentId = Integer.parseInt(studentIdStr);
         }
-
-        boolean registerCheck = registerCheckStr != null && Boolean.parseBoolean(registerCheckStr);
-        req.setAttribute("registercheck_flag", registerCheck);
 
         StudentDao studentDao = new StudentDao();
         ScoreDao scoreDao = new ScoreDao();

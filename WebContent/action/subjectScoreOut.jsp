@@ -1,4 +1,4 @@
-<%-- 成績入力(クラス別) --%>
+<%-- 成績出力(科目別) --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -8,27 +8,10 @@
 	<link href="../common/assets/css/classScore_css.css" rel="stylesheet">
 </c:param>
 	<c:param name="title">
-		成績入力(クラス別)
+		成績出力(科目別)
 	</c:param>
 
 	<c:param name="scripts">
-	<section class="me-4">
-        <!-- ここにフォームや内容を記載 -->
-
-        <!-- ダイアログ表示用スクリプト -->
-         <c:choose>
-         	<c:when test="${registercheck_flag == true}">
-         		 <script>
-                alert("登録が完了しました！");
-            	</script>
-         	</c:when>
-         	<c:when test="${registercheck_flag == false}">
-         		 <script>
-                alert("登録に失敗しました！");
-            	</script>
-         	</c:when>
-         </c:choose>
-    </section>
 	</c:param>
 
 	<c:param name="content">
@@ -37,12 +20,12 @@
 			<form method="post" action="SubjectScoreOut.action">
 				<div class="row border mx-3 mb-3 py-2 align-items-center rounded" id="filter">
 					<div class="col-2">
-						<label class="form-label" for="student-f1-select">履修学年 </label>
+						<label class="form-label" for="student-f1-select">入学年度 </label>
 						<select class="form-select " id="student-f1-select" name="courseYear">
 							<option value="0">--------</option>
-							<option value="1" <c:if test="${courseYear==1}">selected</c:if>>1年生</option>
-							<option value="2" <c:if test="${courseYear==2}">selected</c:if>>2年生</option>
-							<option value="3" <c:if test="${courseYear==3}">selected</c:if>>3年生</option>
+							<option value="2021" <c:if test="${courseYear==2021}">selected</c:if>>2021</option>
+							<option value="2022" <c:if test="${courseYear==2022}">selected</c:if>>2022</option>
+							<option value="2023" <c:if test="${courseYear==2023}">selected</c:if>>2023</option>
 						</select>
 					</div>
 					<div class="col-4">
@@ -72,7 +55,7 @@
 			</form>
 			<c:choose>
 		    <c:when test="${score_list.size()>0}">
-		       <form method="post" id="test-form" action="SubjectScoreOut.action">
+		       <form method="post" id="test-form" action="SubjectOut.action">
 		            <table class="table table-hover">
 		                <tr>
 		                    <th>学生番号</th>
@@ -81,6 +64,7 @@
 		                    <th>科目名</th>
 		                    <th>科目コード</th>
 		                    <th>点数</th>
+		                    <th>認定評価</th>
 		                </tr>
 		                <c:forEach var="score" items="${score_list}">
 		                    <tr>
@@ -90,13 +74,20 @@
 		                        <td>${subject_name}</td>
 		                        <td>${subject_code}</td>
 		                        <td>${score.scoreValue}</td>
+		                        <c:choose>
+		    						<c:when test="${score.scoreValue >= 90}"><td>秀</td></c:when>
+		    						<c:when test="${score.scoreValue >= 80}"><td>優</td></c:when>
+		    						<c:when test="${score.scoreValue >= 70}"><td>良</td></c:when>
+		    						<c:when test="${score.scoreValue >= 60}"><td>可</td></c:when>
+		    						<c:when test="${score.scoreValue <= 59}"><td>不可</td></c:when>
+		    					</c:choose>
 		                    </tr>
 		                </c:forEach>
 		            </table>
 		             <input type="hidden" name="courseYear" value="${courseYear}" />
 		             <input type="hidden" name="class_id" value="${class_id}" />
 		             <input type="hidden" name="subject_id" value="${subject_id}" />
-		             <input type="hidden" name="subject_id_in" value="${subject_id}" />
+		            <input type="hidden" name="csv_date" value="${score_list}" />
 		            <input class="btn btn-secondary" type="submit" value="CSV出力" name="end" />
 		        </form>
 		    </c:when>

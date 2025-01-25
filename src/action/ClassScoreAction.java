@@ -83,7 +83,7 @@ public class ClassScoreAction extends Action {
 
 		//DBからデータ取得 3
 		if (class_id  != 0 && subject_id != 0 && courseYear != 0) {
-			score_list = scoreDao.getScore(class_id,subject_id,courseYear);//成績データ取得
+			score_list = scoreDao.getScore(class_id,subject_id,courseYear,"in");//成績データ取得
 			subject = subjectDao.getSubjectNameCode(subject_id);//科目名、科目コード取得
 		    subject_name = subject.getSubjectName();
 		    subject_code = subject.getSubjectCode();

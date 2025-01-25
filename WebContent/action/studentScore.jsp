@@ -98,8 +98,12 @@
 				                required
 				            />
 				        </div>
+				        <!-- 絞込みボタン -->
+				        <div>
+				            <button class="btn btn-secondary" id="filter-button">絞込み</button>
+				        </div>
 
-				        <!-- 学生番号検索ボタン -->
+				         <!-- 学生番号検索ボタン -->
 				        <div class="me-3">
 				            <input
 				                class="btn btn-primary"
@@ -110,10 +114,6 @@
 				            />
 				        </div>
 
-				        <!-- 絞込みボタン -->
-				        <div>
-				            <button class="btn btn-secondary" id="filter-button">絞込み</button>
-				        </div>
 				    </form>
 				</div>
 			<c:choose>
@@ -130,7 +130,7 @@
 		                </tr>
 		                <c:forEach var="score" items="${score_list}">
 		                    <tr>
-		                        <td>${score_list[0].getStudentId()}</td>
+		                        <td>${student_info_id}</td>
 		                        <td>
 		                            <!-- 個別月入力フィールド -->
 			                        <input type="number" name="month_${score.subjectId}" min="0" max="12" placeholder="月" class="month-input"
@@ -143,7 +143,7 @@
 			                        	</c:when>
 			                        </c:choose> />
 		                        </td>
-		                        <td>${score_list[0].getStudent().getStudentName()}</td>
+		                        <td>${student_info_name}</td>
 		                        <td>${score.subject.subjectName}</td>
 		                        <td>${score.subject.subjectCode}</td>
 		                        <td>

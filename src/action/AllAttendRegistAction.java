@@ -59,7 +59,7 @@ public class AllAttendRegistAction extends Action {
 		if(admissionYear > 0 && year > 0 && month > 0 && className.length() > 0) {	// パラメーターチェック
 			if(this.isValidDate(year, month, 1)) {	// 有効な年月日か検証
 				/** 学生出席状況を取得 **/
-				studentFieldsMap = this.getStudentFieldsMap(admissionYear, className, year, month, null);
+				studentFieldsMap = this.getStudentFieldsMap(admissionYear, className, year, month, null, true);
 			}
 			else {
 				errors.add("年月が正しくありません");
@@ -103,27 +103,28 @@ public class AllAttendRegistAction extends Action {
 
 	/**
 	 * 学生情報一覧を取得
+	 * 他処理でも使用するので関数化
 	 * @param admissionYear 入学年
 	 * @param className クラス名
 	 * @param year 抽出年
 	 * @param month 抽出月
 	 * @param day 抽出日 (ひと月分の場合はnull)
+	 * @param useAttendSum 出席合計項目を付ける場合はtrue、必要ない場合はfalse
 	 * @return 学生情報一覧:LinkedHashMap<学生ID:Integer, 学生情報項目:HashMap<項目名:String, 値:String>>
 	 * @throws Exception
 	 */
-	protected LinkedHashMap<Integer, HashMap<String, String>> getStudentFieldsMap(int admissionYear, String className, int year, int month, Integer day) throws Exception {
+	protected LinkedHashMap<Integer, HashMap<String, String>> getStudentFieldsMap(int admissionYear, String className, int year, int month, Integer day, boolean useAttendSum) throws Exception {
 		LinkedHashMap<Integer, HashMap<String, String>> studentFieldsMap = new LinkedHashMap<>();	// 学生情報一覧:LinkedHashMap<学生ID:Integer, 学生情報項目:HashMap<項目名:String, 値:String>>
 
 		List<Student> studentList = null;	// 学生一覧
 		HashMap<Integer, HashMap<Integer, Integer>> studentAttendMap = new HashMap<>();	// 出席状況一覧 HashMap<学生ID:Integer, 日別出席状況:HashMap<日:Integer, 出席状況:Integer>>
 		HashMap<Integer, Double> studentAttendSumMap = new HashMap<>();	// 合計出席数 HashMap<学生ID:Integer, 合計出席数:Double>
 
-
 		//DBからデータ取得 3
 		StudentDao studentDao = new StudentDao();
 		studentList = studentDao.getStudent(admissionYear, className);	// 学生データ取得
 
-
+		// 学生の必要情報を配列に設定
 		for(Student student: studentList) {
 			HashMap<String, String> studentFields = new HashMap<String, String>();
 
@@ -148,7 +149,7 @@ public class AllAttendRegistAction extends Action {
 				attend.getAttendDate().toLocalDate().getDayOfMonth(),	// 出欠日
 				attend.getAttendStatus());	//出欠状況コード
 		}
-		// 長期休暇は全学生 -2 に設定
+		// 長期休暇は全学生 9 に設定
 		int startDay;	// 抽出開始日
 		int endDay;		// 抽出終了日
 		if(day == null) {	// 抽出日がnullの場合、抽出月の1日から最終日に設定
@@ -168,49 +169,60 @@ public class AllAttendRegistAction extends Action {
 				gradeClassId,
 				Date.valueOf(LocalDate.of(year, month, startDay)),
 				Date.valueOf(LocalDate.of(year, month, endDay)) );
-		// 長期休暇があったら、全学生を-2に設定
+		// 長期休暇があったら、全学生を9に設定
 		for(Absence absence: absenceList) {		// 全件の長期休暇
 			for(int i = absence.getStartDate().toLocalDate().getDayOfMonth(); i <= absence.getEndDate().toLocalDate().getDayOfMonth(); i++) {	// 開始日～終了日まで繰り返す
 				for(Student student: studentList) {	// (指定クラスの)全学生
-					studentAttendMap.get(student.getStudentId()).put(i, -2);	// 指定学生の出欠の値を -2
+					studentAttendMap.get(student.getStudentId()).put(i, 9);	// 指定学生の出欠の値を 9
 				}
 			}
 		}
 
-		// 退学者の出席状況を -1 に設定
+		// 退学者の出席状況を 8 に設定
 		for(Student student: studentList) {
 			ZonedDateTime withdrawalDate = student.getWithdrawalDate();	// 退学年月日
 			if(withdrawalDate != null) {
 				int withdrawalStartDay = YearMonth.of(year, month).lengthOfMonth() + 1;
-				// withdrawalDateが指定年月と同じ場合、退学日の次の日から -1
+				// withdrawalDateが指定年月と同じ場合、退学日の次の日から 8
 				if (YearMonth.from(withdrawalDate.toLocalDate()).equals(YearMonth.of(year, month))) {
 					withdrawalStartDay = withdrawalDate.getDayOfMonth() + 1;
 				}
-				// 指定年月がwithdrawalDateを経過している場合、全日 -1
+				// 指定年月がwithdrawalDateを経過している場合、全日 8
 				else if(withdrawalDate.toLocalDate().isBefore(YearMonth.of(year, month).atEndOfMonth())) {
 					withdrawalStartDay = 1;
 				}
-				// 指定日から月末まで -1
+				// 指定日から月末まで 8
 				for(int i = withdrawalStartDay; i <= YearMonth.of(year, month).lengthOfMonth(); i++) {
-					studentAttendMap.get(student.getStudentId()).put(i, -1);
+					studentAttendMap.get(student.getStudentId()).put(i, 8);
 				}
 			}
 		}
 
 		// 合計欠席数を計算
-		for(Map.Entry<Integer, HashMap<Integer, Integer>> attends: studentAttendMap.entrySet()) {
-			for(Map.Entry<Integer, Integer> attend: attends.getValue().entrySet()) {
-				Double attendSum = studentAttendSumMap.get(attends.getKey());
-				if(attend.getValue() == 1) {	// 欠席
-					attendSum += 1.0;
-				} else if(attend.getValue() == 2 || attend.getValue() == 3) {	// 遅刻・早退
-					attendSum += 0.3;
+		if(useAttendSum) {
+			for(Map.Entry<Integer, HashMap<Integer, Integer>> attends: studentAttendMap.entrySet()) {
+				for(Map.Entry<Integer, Integer> attend: attends.getValue().entrySet()) {
+					Double attendSum = studentAttendSumMap.get(attends.getKey());
+					if(attend.getValue() == 1) {	// 欠席
+						attendSum += 1.0;
+					} else if(attend.getValue() == 2 || attend.getValue() == 3 || attend.getValue() == 23) {	// 遅刻・早退・遅刻＋早退
+						attendSum += 0.3;	// 遅刻＋早退は、後から+0.3
+					}
+					// x.9以上の場合は切り上げ
+					if((attendSum - Math.floor(attendSum)) > 0.899) {	// >= 0.9 は、Double型の誤差が生じるので近似値で比較
+						attendSum = Math.ceil(attendSum);
+					}
+
+					if(attend.getValue() == 23) {	// 遅刻＋早退の場合は、もう一度+0.3 ※Double型は小数の誤差が出るので、0.3ずつ加算する
+						attendSum += 0.3;
+						// x.9以上の場合は切り上げ
+						if((attendSum - Math.floor(attendSum)) > 0.899) {	// >= 0.9 は、Double型の誤差が生じるので近似値で比較
+							attendSum = Math.ceil(attendSum);
+						}
+					}
+
+					studentAttendSumMap.put(attends.getKey(), attendSum);
 				}
-				// x.9以上の場合は切り上げ
-				if((attendSum - Math.floor(attendSum)) > 0.899) {	// >= 0.9 は、Double型の誤差が生じるので近似値で比較
-					attendSum = Math.ceil(attendSum);
-				}
-				studentAttendSumMap.put(attends.getKey(), attendSum);
 			}
 		}
 
@@ -223,7 +235,7 @@ public class AllAttendRegistAction extends Action {
 
 		// 合計出席数を学生情報一覧Mapに追加
 		for(Map.Entry<Integer, Double> studentAttendSum: studentAttendSumMap.entrySet()) {
-			studentFieldsMap.get(studentAttendSum.getKey()).put("attend_sum", String.valueOf(studentAttendSum.getValue()));
+			studentFieldsMap.get(studentAttendSum.getKey()).put("attend_sum", String.format("%.1f", studentAttendSum.getValue()));
 		}
 
 		return studentFieldsMap;

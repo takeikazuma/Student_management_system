@@ -3,7 +3,6 @@ package action;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
-import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,7 +48,7 @@ public class AllAttendOutputAction extends AllAttendRegistAction {
 		if(admissionYear > 0 && year > 0 && month > 0 && className.length() > 0) {	// パラメーターチェック
 			if(this.isValidDate(year, month, 1)) {	// 有効な年月日か検証
 				/** 学生出席状況を取得 **/
-				studentFieldsMap = this.getStudentFieldsMap(admissionYear, className, year, month, null);
+				studentFieldsMap = this.getStudentFieldsMap(admissionYear, className, year, month, null, true);
 			}
 			else {
 				errors.add("年月が正しくありません");
@@ -87,10 +86,10 @@ public class AllAttendOutputAction extends AllAttendRegistAction {
 				    		attendData = 0;
 				    	}
 				    	switch(attendData) {
-				    	case -2:
-				    		csvLine.add("休");
+				    	case 9:
+				    		csvLine.add("-");
 				    		break;
-				    	case -1:
+				    	case 8:
 				    		csvLine.add("退");
 				    		break;
 				    	case 1:
@@ -101,6 +100,9 @@ public class AllAttendOutputAction extends AllAttendRegistAction {
 				    		break;
 				    	case 3:
 				    		csvLine.add("早");
+				    		break;
+				    	case 23:
+				    		csvLine.add("遅早");
 				    		break;
 			    		default:
 			    			csvLine.add("");

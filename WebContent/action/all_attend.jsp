@@ -119,35 +119,39 @@
 
 	        <c:if test="${studentFieldsMap.size() > 0}">
 				<div>${year}年${month}月 出欠席一覧</div>
-				<table class="w-100" style="text-align:center">
+				<table class="table w-100" style="text-align:center">
+				<thead class="table-secondary">
 					<tr>
-						<td class="border">氏名</td>
+						<th class="border" style="padding:2px">氏名</th>
 						<c:forEach var="day" begin="1" end="${length_of_month}">
-							<td class="border">${String.format('%02d',day)}</td>
+							<th class="border" style="padding:2px">${String.format('%02d',day)}</th>
 			            </c:forEach>
-			            <td class="border">合計</td>
+			            <th class="border" style="padding:2px">合計</th>
 					</tr>
+				</thead>
+				<tbody>
 					<%-- 抽出学生を繰り返し --%>
 					<c:forEach var="studentFields" items="${studentFieldsMap}">
 						<tr>
-							<td class="border">${studentFields.value.get("student_name")}</td>
+							<td class="border" style="padding:2px">${studentFields.value.get("student_name")}</td>
 							<%-- 指定月の全ての日を繰り返し --%>
 							<c:forEach var="day" begin="1" end="${length_of_month}">
-								<td class="border">
+								<td class="border" style="padding:2px">
 									<c:choose>
-										<c:when test="${studentFields.value.get(String.valueOf(day))==-2}">休</c:when>
-										<c:when test="${studentFields.value.get(String.valueOf(day))==-1}">退</c:when>
+										<c:when test="${studentFields.value.get(String.valueOf(day))== 9}">-</c:when>
+										<c:when test="${studentFields.value.get(String.valueOf(day))== 8}">退</c:when>
 										<c:when test="${studentFields.value.get(String.valueOf(day))== 1}">欠</c:when>
 										<c:when test="${studentFields.value.get(String.valueOf(day))== 2}">遅</c:when>
 										<c:when test="${studentFields.value.get(String.valueOf(day))== 3}">早</c:when>
+										<c:when test="${studentFields.value.get(String.valueOf(day))==23}">遅早</c:when>
 										<c:otherwise><%-- 出席 --%></c:otherwise>
 									</c:choose>
 								</td>
 							</c:forEach>
-							<td class="border">${studentFields.value.get("attend_sum")}</td>
+							<td class="border" style="padding:2px">${studentFields.value.get("attend_sum")}</td>
 		                </tr>
 					</c:forEach>
-
+				</tbody>
 	            </table>
 	            <div class="mt-4">
 		            <form action="AllAttendOutput.action" method="post">

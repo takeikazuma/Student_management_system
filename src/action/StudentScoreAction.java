@@ -11,7 +11,9 @@ import dao.ScoreDao;
 import dao.StudentDao;
 import tool.Action;
 
-public class StudentScoreOutAction extends Action {
+
+public class StudentScoreAction extends Action {
+
 	@Override
 	public void execute(HttpServletRequest req, HttpServletResponse res) throws Exception {
 //	//ローカル変数の宣言 1
@@ -49,22 +51,24 @@ public class StudentScoreOutAction extends Action {
 		if (student_id != 0 && (student_id >= 1_000_000 && student_id <= 9_999_999)) {
 			student_info = studentDao.getStudent(student_id);
 			if(student_info!=null){
-				score_list = scoreDao.getScore(student_id,"out");//成績データ取得
+				score_list = scoreDao.getScore(student_id,"in");//成績データ取得
+				for(Student student_in :student_info){
+					req.setAttribute("student_info_id", student_in.getStudentId());
+					req.setAttribute("student_info_name", student_in.getStudentName());
+				}
 			}
 		}
 
 //レスポンス値をセット6
 		// リクエストに成績一覧をセット
 		req.setAttribute("score_list", score_list);
-		req.setAttribute("student_info", student_info);
 		if (student_id == 0) {
 	        req.setAttribute("student_id", "");  // student_id を空の文字列に設定
 	    } else {
 	        req.setAttribute("student_id", student_id);  // 通常のstudent_idをセット
 	    }
-
 	//フォワード
-	url = "studentScoreOut.jsp";
-	req.getRequestDispatcher(url).forward(req, res);
+		url = "studentScore.jsp";
+		req.getRequestDispatcher(url).forward(req, res);
 	}
 }

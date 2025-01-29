@@ -52,7 +52,7 @@ public class SelectAttendAction extends AllAttendRegistAction {
 		if(admissionYear > 0 && className != null && year > 0 && month != null && day != null) {
 			if(this.isValidDate(year, month, day)) {	// 有効な年月日か検証
 				/** 学生出席状況を取得 **/
-				studentFieldsMap = this.getStudentFieldsMap(admissionYear, className, year, month, day);
+				studentFieldsMap = this.getStudentFieldsMap(admissionYear, className, year, month, day, false);
 			}
 			else {
 				errors.add("年月日が正しくありません");
@@ -66,7 +66,6 @@ public class SelectAttendAction extends AllAttendRegistAction {
 
 		// 検索結果をセット
 		req.setAttribute("studentFieldsMap", studentFieldsMap);
-		//req.setAttribute("attendMap", attendMap);
 
 		// 入力された検索項目をセット
 		req.setAttribute("admission_year", req.getParameter("admission_year"));

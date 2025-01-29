@@ -17,7 +17,7 @@
 				</div>
 				<div class="col d-flex align-items-center justify-content-center mx-2 rounded shadow"
 					style="height: 10rem; background-color: #bbd;">
-					<a href="#">科目指定</a>
+					<a href="SubjectScoreOut.action">科目指定</a>
 				</div>
 			</div>
 		</section>

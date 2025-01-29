@@ -129,13 +129,16 @@
 					<input id="month" name="month" type="hidden" value="${month}" />
 					<input id="day" name="day" type="hidden" value="${day}" />
 					<div>${year}年${month}月${day}日 出欠席入力</div>
-					<table class="w-100" style="text-align:center">
+					<table class="table w-100" style="text-align:center">
+					<thead class="table-secondary">
 						<tr>
-							<td class="border">入学年度</td>
-							<td class="border">クラス</td>
-							<td class="border">氏名</td>
-							<td class="border">出欠席</td>
+							<th class="border">入学年度</th>
+							<th class="border">クラス</th>
+							<th class="border">氏名</th>
+							<th class="border">出欠席</th>
 						</tr>
+					</thead>
+					<tbody>
 						<%-- 抽出学生を繰り返し --%>
 						<c:forEach var="studentFields" items="${studentFieldsMap}">
 						<tr>
@@ -144,21 +147,24 @@
 							<td class="border">${studentFields.value.get("student_name")}</td>
 							<td class="border">
 								<c:choose>
-									<c:when test="${studentFields.value.get(String.valueOf(day)) == null || studentFields.value.get(String.valueOf(day)) >= 0}">
+									<%-- 退学・休暇以外はプルダウンを表示 --%>
+									<c:when test="${studentFields.value.get(String.valueOf(day)) == null || studentFields.value.get(String.valueOf(day)) <= 3 || studentFields.value.get(String.valueOf(day)) == 23}">
 										<select name="${studentFields.key}_${String.format('%04d',Integer.valueOf(year))}${String.format('%02d',Integer.valueOf(month))}${String.format('%02d',Integer.valueOf(day))}">
 											<option value="0" <c:if test="${studentFields.value.get(String.valueOf(day)) == 0}">selected</c:if>>出</option>
 											<option value="1" <c:if test="${studentFields.value.get(String.valueOf(day)) == 1}">selected</c:if>>欠</option>
 											<option value="2" <c:if test="${studentFields.value.get(String.valueOf(day)) == 2}">selected</c:if>>遅</option>
 											<option value="3" <c:if test="${studentFields.value.get(String.valueOf(day)) == 3}">selected</c:if>>早</option>
+											<%-- option value="23" <c:if test="${studentFields.value.get(String.valueOf(day)) ==23}">selected</c:if>>遅早</option --%>
 										</select>
 									</c:when>
-									<c:when test="${studentFields.value.get(String.valueOf(day)) == -1}"><div>退学</div></c:when>
-									<c:when test="${studentFields.value.get(String.valueOf(day)) == -2}"><div>休暇</div></c:when>
+									<c:when test="${studentFields.value.get(String.valueOf(day)) == 8}"><div>退学</div></c:when>
+									<c:when test="${studentFields.value.get(String.valueOf(day)) == 9}"><div>休暇</div></c:when>
 									<c:otherwise><%-- 何もしない --%></c:otherwise>
 								</c:choose>
 							</td>
 		                </tr>
 						</c:forEach>
+		            </tbody>
 		            </table>
 		            <div class="mt-4">
 		                <input class="w-25 btn btn-lg btn-primary" type="submit" name="login" value="登録" />

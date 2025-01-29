@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.time.ZonedDateTime;
 
 public class Absence {
+    private int absenceId;
     private int gradeClassId;   // クラスID
     private String className;    // クラス名
     private int admissionYear;   // 入学年度
@@ -13,6 +14,14 @@ public class Absence {
     private ZonedDateTime updateDate; // 更新日時
 
     // Getter and Setter methods
+    public int setAbsenceId() {
+        return absenceId;
+    }
+
+    public void setAbsenceId(int absenceId) {
+        this.absenceId = absenceId;
+    }
+
     public int getGradeClassId() {
         return gradeClassId;
     }

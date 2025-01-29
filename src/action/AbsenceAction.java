@@ -27,8 +27,14 @@ public class AbsenceAction extends HttpServlet {
             Date endDate = Date.valueOf(request.getParameter("end_date"));
 
             // Absenceインスタンスを作成しデータをセット
+
+
             Absence absence = new Absence();
-            absence.setClassName(className);
+
+            GradeClassDao setGradeClassDao = new GradeClassDao();
+            int classId = setGradeClassDao.getClassId(className);
+            absence.setGradeClassId(classId);
+
             absence.setAdmissionYear(admissionYear);
             absence.setStartDate(startDate);
             absence.setEndDate(endDate);

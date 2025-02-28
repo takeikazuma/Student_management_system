@@ -114,7 +114,7 @@
 	                            <label>入力日</label>
 	                        </td>
 	                        <td class="mx-1">
-		                        <input class="btn btn-lg btn-primary" type="submit" name="login" value="表示" />
+		                        <input class="btn btn-lg btn-primary" type="submit" name="login" value="出欠席入力" />
 	                        </td>
 						</tr></table>
                     </div>

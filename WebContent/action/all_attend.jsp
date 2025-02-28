@@ -110,7 +110,7 @@
 	                            <label>抽出月</label>
 	                        </td>
 	                        <td class="mx-1">
-		                        <input class="btn btn-lg btn-primary" type="submit" name="login" value="表示" />
+		                        <input class="btn btn-lg btn-primary" type="submit" name="login" value="一覧表示" />
 	                        </td>
 						</tr></table>
                     </div>

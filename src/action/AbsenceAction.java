@@ -22,7 +22,7 @@ public class AbsenceAction extends HttpServlet {
         try {
             // リクエストからパラメータを取得
             String className = request.getParameter("class_name");
-            int admissionYear = Integer.parseInt(request.getParameter("admission_year"));
+//            int admissionYear = Integer.parseInt(request.getParameter("admission_year"));
             Date startDate = Date.valueOf(request.getParameter("start_date"));
             Date endDate = Date.valueOf(request.getParameter("end_date"));
 
@@ -35,7 +35,7 @@ public class AbsenceAction extends HttpServlet {
             int classId = setGradeClassDao.getClassId(className);
             absence.setGradeClassId(classId);
 
-            absence.setAdmissionYear(admissionYear);
+//            absence.setAdmissionYear(admissionYear);
             absence.setStartDate(startDate);
             absence.setEndDate(endDate);
 

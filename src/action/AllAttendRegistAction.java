@@ -60,13 +60,14 @@ public class AllAttendRegistAction extends Action {
 			if(this.isValidDate(year, month, 1)) {	// 有効な年月日か検証
 				/** 学生出席状況を取得 **/
 				studentFieldsMap = this.getStudentFieldsMap(admissionYear, className, year, month, null, true);
+				req.setAttribute("length_of_month", YearMonth.of(year, month).lengthOfMonth());
 			}
 			else {
 				errors.add("年月が正しくありません");
+				req.setAttribute("length_of_month", 0);
 			}
 		}
 		req.setAttribute("studentFieldsMap", studentFieldsMap);
-		req.setAttribute("length_of_month", YearMonth.of(year, month).lengthOfMonth());
 
 		// 入力された項目をセット
 		req.setAttribute("admission_year", req.getParameter("admission_year"));
@@ -93,7 +94,7 @@ public class AllAttendRegistAction extends Action {
 		boolean result = false;
 		try {
 			// LocalDateを生成して検証
-			LocalDate.of(year, month, 1);
+			LocalDate.of(year, month, day);
 			result = true;
 		} catch (Exception e) {
 			result = false;
